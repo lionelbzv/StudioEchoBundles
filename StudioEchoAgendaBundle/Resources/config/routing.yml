@@ -1,0 +1,3 @@
+studio_echo_agenda_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: StudioEchoAgendaBundle:Default:index }
