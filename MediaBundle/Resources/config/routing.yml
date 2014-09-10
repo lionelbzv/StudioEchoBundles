@@ -1,0 +1,34 @@
+media_homepage:
+    pattern:  /
+    defaults: { _controller: MediaBundle:UploadMedia:index }
+
+# Upload / Display routes
+media_display_zone:
+    pattern:  /display/{mediaObjectId}/key/{mediaParameterConfigKey}
+    defaults: { _controller: MediaBundle:UploadMedia:displayZone }
+
+# JSON routes
+media_upload_file:
+    pattern:  /upload-file/upload.{_format}
+    defaults: { _controller: MediaBundle:UploadMedia:upload, _format: json }
+    requirements: { _format: (xml|json) }
+
+media_delete_file:
+    pattern: /delete-file/{mediaFileId}/{mediaParameterConfigKey}/delete.{_format}
+    defaults: { _controller: MediaBundle:UploadMedia:delete, _format: json }
+    requirements: { _format: (xml|json), _method: GET }
+
+media_online_file:
+    pattern: /online-file/{mediaFileId}/online.{_format}
+    defaults: { _controller: MediaBundle:UploadMedia:online, _format: json }
+    requirements: { _format: (xml|json), _method: GET }
+
+media_edit_file:
+    pattern: /edit-file/{mediaFileId}/edit.{_format}
+    defaults: { _controller: MediaBundle:UploadMedia:edit, _format: json }
+    requirements: { _format: (xml|json), _method: POST }
+
+media_sort:
+    pattern: /sort-files/sort.{_format}
+    defaults: { _controller: MediaBundle:UploadMedia:sort, _format: json }
+    requirements: { _format: (xml|json), _method: POST }
