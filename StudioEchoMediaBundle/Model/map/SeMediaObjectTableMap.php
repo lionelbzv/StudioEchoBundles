@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\map;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map;
 
 use \RelationMap;
 use \TableMap;
@@ -16,7 +16,7 @@ use \TableMap;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  *
- * @package    propel.generator.src.StudioEcho.StudioEchoMediaBundle.Model.map
+ * @package    propel.generator.src.StudioEchoBundles.StudioEchoBundlesMediaBundle.Model.map
  */
 class SeMediaObjectTableMap extends TableMap
 {
@@ -24,7 +24,7 @@ class SeMediaObjectTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src.StudioEcho.StudioEchoMediaBundle.Model.map.SeMediaObjectTableMap';
+    const CLASS_NAME = 'src.StudioEchoBundles.StudioEchoBundlesMediaBundle.Model.map.SeMediaObjectTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -38,8 +38,8 @@ class SeMediaObjectTableMap extends TableMap
         // attributes
         $this->setName('se_media_object');
         $this->setPhpName('SeMediaObject');
-        $this->setClassname('StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaObject');
-        $this->setPackage('src.StudioEcho.StudioEchoMediaBundle.Model');
+        $this->setClassname('StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaObject');
+        $this->setPackage('src.StudioEchoBundles.StudioEchoBundlesMediaBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
@@ -55,8 +55,8 @@ class SeMediaObjectTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('SeObjectHasFile', 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeObjectHasFile', RelationMap::ONE_TO_MANY, array('id' => 'se_media_object_id', ), 'CASCADE', 'CASCADE', 'SeObjectHasFiles');
-        $this->addRelation('SeMediaFile', 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFile', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'SeMediaFiles');
+        $this->addRelation('SeObjectHasFile', 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeObjectHasFile', RelationMap::ONE_TO_MANY, array('id' => 'se_media_object_id', ), 'CASCADE', 'CASCADE', 'SeObjectHasFiles');
+        $this->addRelation('SeMediaFile', 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFile', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'SeMediaFiles');
     } // buildRelations()
 
     /**

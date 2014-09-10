@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoGmapsBundle\Tests\Controller;
+namespace StudioEchoBundles\StudioEchoBundlesGmapsBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

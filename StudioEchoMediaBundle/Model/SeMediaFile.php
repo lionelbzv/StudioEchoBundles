@@ -1,8 +1,8 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model;
 
-use StudioEcho\StudioEchoMediaBundle\Model\om\BaseSeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om\BaseSeMediaFile;
 
 class SeMediaFile extends BaseSeMediaFile
 {

@@ -1,5 +1,5 @@
 <?php
-namespace StudioEcho\StudioEchoAgendaBundle\Twig\Extension;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\Twig\Extension;
 
 class AgendaExtension extends \Twig_Extension
 {

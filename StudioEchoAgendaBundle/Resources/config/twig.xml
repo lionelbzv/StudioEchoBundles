@@ -5,7 +5,7 @@
    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="twig.extension.se.agenda" class="StudioEcho\StudioEchoAgendaBundle\Twig\Extension\AgendaExtension" public="false">
+        <service id="twig.extension.se.agenda" class="StudioEchoBundles\StudioEchoBundlesAgendaBundle\Twig\Extension\AgendaExtension" public="false">
             <argument type="service" id="service_container" />
             <tag name="twig.extension" />
         </service>

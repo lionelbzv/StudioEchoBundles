@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \BasePeer;
 use \Criteria;
@@ -9,12 +9,12 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\map\SeObjectHasFileTableMap;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map\SeObjectHasFileTableMap;
 
 abstract class BaseSeObjectHasFilePeer
 {
@@ -26,10 +26,10 @@ abstract class BaseSeObjectHasFilePeer
     const TABLE_NAME = 'se_object_has_file';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeObjectHasFile';
+    const OM_CLASS = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeObjectHasFile';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'StudioEcho\\StudioEchoMediaBundle\\Model\\map\\SeObjectHasFileTableMap';
+    const TM_CLASS = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\map\\SeObjectHasFileTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 5;
@@ -1141,7 +1141,7 @@ abstract class BaseSeObjectHasFilePeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeObjectHasFilePeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeObjectHasFilePeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \StudioEcho\StudioEchoMediaBundle\Model\map\SeObjectHasFileTableMap());
+        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map\SeObjectHasFileTableMap());
       }
     }
 

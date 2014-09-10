@@ -1,9 +1,9 @@
 <?php
 
-namespace StudioEcho\StudioEchoAgendaBundle;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class StudioEchoAgendaBundle extends Bundle
+class StudioEchoBundlesAgendaBundle extends Bundle
 {
 }

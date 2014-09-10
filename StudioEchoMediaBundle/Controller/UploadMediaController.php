@@ -27,18 +27,18 @@
  * @author Lionel Bouzonville / Studio Echo
  * ***************************************** */
 
-namespace StudioEcho\StudioEchoMediaBundle\Controller;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectPeer;
 
-use StudioEcho\StudioEchoMediaBundle\Lib\FileUploader;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Lib\FileUploader;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,7 +92,7 @@ class UploadMediaController extends Controller {
         }
         
         // Render the view
-        return $this->render('StudioEchoMediaBundle:UploadMedia:index.html.twig', array(
+        return $this->render('StudioEchoBundlesMediaBundle:UploadMedia:index.html.twig', array(
                     'currentMediaObjectId' => $seMediaObject->getId(),
                     'mediaParameterConfigKey' => $mediaParameterConfigKey
                 ));
@@ -131,7 +131,7 @@ class UploadMediaController extends Controller {
         }
 
         // Render the view
-        return $this->render('StudioEchoMediaBundle:UploadMedia:displayZone.html.twig', array(
+        return $this->render('StudioEchoBundlesMediaBundle:UploadMedia:displayZone.html.twig', array(
                     'mediaObjectId' => $mediaObjectId,
                     'mediaParameterConfigKey' => $mediaParameterConfigKey,
                     'mediaFiles' => $mediaFiles

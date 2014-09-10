@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoAgendaBundle\Tests\Controller;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

@@ -1,11 +1,11 @@
 <?php
-namespace StudioEcho\Lib;
+namespace StudioEchoBundles\Lib;
 /**
- * Description of StudioEchoUtils
+ * Description of StudioEchoBundlesUtils
  *
  * @author Studio Echo / Lionel Bouzonville
  */
-class StudioEchoUtils {
+class StudioEchoBundlesUtils {
 
 	/**
 	 *	Transforme les lettres avec accents vers la lettre sans accents.
@@ -111,27 +111,27 @@ class StudioEchoUtils {
 	      }
 	      
 	      $days_number = cal_days_in_month(CAL_GREGORIAN, $prev_month, $prev_year);
-	      $agenda[$prev_year . '-' . StudioEchoUtils::TwoDigits($prev_month)] = array(
+	      $agenda[$prev_year . '-' . StudioEchoBundlesUtils::TwoDigits($prev_month)] = array(
 	          'month' => $prev_month,
 	          'year' => $prev_year,
-	          'month_label' => StudioEchoUtils::getMonthLabelFromMonthNum($prev_month),
-	          'div_id' => StudioEchoUtils::getDivIdFromMonthNum($prev_month),
+	          'month_label' => StudioEchoBundlesUtils::getMonthLabelFromMonthNum($prev_month),
+	          'div_id' => StudioEchoBundlesUtils::getDivIdFromMonthNum($prev_month),
 	          'days_number' => $days_number,
-	          'class_ul' => StudioEchoUtils::getClassUlFromDaysNumber($days_number),
-	          'days' => StudioEchoUtils::initEventDaysArray($prev_month, $prev_year, $days_number, $day, $month, $year),
+	          'class_ul' => StudioEchoBundlesUtils::getClassUlFromDaysNumber($days_number),
+	          'days' => StudioEchoBundlesUtils::initEventDaysArray($prev_month, $prev_year, $days_number, $day, $month, $year),
 	      );
 	    }
 	    
 	    // set current month
 	    $days_number = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-	    $agenda[$year . '-' . StudioEchoUtils::TwoDigits($month)] = array(
+	    $agenda[$year . '-' . StudioEchoBundlesUtils::TwoDigits($month)] = array(
 	        'month' => $month,
 	        'year' => $year,
-	        'month_label' => StudioEchoUtils::getMonthLabelFromMonthNum($month),
-	        'div_id' => StudioEchoUtils::getDivIdFromMonthNum($month),
+	        'month_label' => StudioEchoBundlesUtils::getMonthLabelFromMonthNum($month),
+	        'div_id' => StudioEchoBundlesUtils::getDivIdFromMonthNum($month),
 	        'days_number' => $days_number,
-	        'class_ul' => StudioEchoUtils::getClassUlFromDaysNumber($days_number),
-	        'days' => StudioEchoUtils::initEventDaysArray($month, $year, $days_number, $day, $month, $year),
+	        'class_ul' => StudioEchoBundlesUtils::getClassUlFromDaysNumber($days_number),
+	        'days' => StudioEchoBundlesUtils::initEventDaysArray($month, $year, $days_number, $day, $month, $year),
 	    );
 	    
 	    // set 6 next month
@@ -143,14 +143,14 @@ class StudioEchoUtils {
 	        $next_year++;
 	      }
 	      $days_number = cal_days_in_month(CAL_GREGORIAN, $next_month, $next_year);
-	      $agenda[$next_year . '-' . StudioEchoUtils::TwoDigits($next_month)] = array(
+	      $agenda[$next_year . '-' . StudioEchoBundlesUtils::TwoDigits($next_month)] = array(
 	          'month' => $next_month,
 	          'year' => $next_year,
-	          'month_label' => StudioEchoUtils::getMonthLabelFromMonthNum($next_month),
-	          'div_id' => StudioEchoUtils::getDivIdFromMonthNum($next_month),
+	          'month_label' => StudioEchoBundlesUtils::getMonthLabelFromMonthNum($next_month),
+	          'div_id' => StudioEchoBundlesUtils::getDivIdFromMonthNum($next_month),
 	          'days_number' => $days_number,
-	          'class_ul' => StudioEchoUtils::getClassUlFromDaysNumber($days_number),
-	          'days' => StudioEchoUtils::initEventDaysArray($next_month, $next_year, $days_number, $day, $month, $year),
+	          'class_ul' => StudioEchoBundlesUtils::getClassUlFromDaysNumber($days_number),
+	          'days' => StudioEchoBundlesUtils::initEventDaysArray($next_month, $next_year, $days_number, $day, $month, $year),
 	      );
 	    }
 	    
@@ -271,7 +271,7 @@ class StudioEchoUtils {
 	      // get all dates of event $agenda_key['month'] + $agenda_key['day']
 	      $date_loop = $begin_ref;
 	      while (strtotime($date_loop) <= strtotime($end_ref)) {
-	        $event_date = array('agenda_month_key' => substr($date_loop, 0, 4) . '-' . substr($date_loop, 5, 2), 'day' => StudioEchoUtils::OneDigit(substr($date_loop, 8, 2)));
+	        $event_date = array('agenda_month_key' => substr($date_loop, 0, 4) . '-' . substr($date_loop, 5, 2), 'day' => StudioEchoBundlesUtils::OneDigit(substr($date_loop, 8, 2)));
 	        array_push($event_dates, $event_date);
 	        $date_loop = date ("Y-m-d", strtotime("+1 day", strtotime($date_loop)));
 	      }

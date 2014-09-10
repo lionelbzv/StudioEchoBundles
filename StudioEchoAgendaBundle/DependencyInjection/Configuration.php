@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoAgendaBundle\DependencyInjection;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

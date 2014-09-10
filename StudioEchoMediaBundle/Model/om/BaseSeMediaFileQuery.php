@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \Criteria;
 use \Exception;
@@ -12,12 +12,12 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18n;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18n;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFile;
 
 /**
  * @method SeMediaFileQuery orderById($order = Criteria::ASC) Order by the id column
@@ -97,7 +97,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
             $dbName = 'default';
         }
         if (null === $modelName) {
-            $modelName = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFile';
+            $modelName = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFile';
         }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -750,13 +750,13 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery A secondary query class using the current class as primary query
+     * @return   \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery A secondary query class using the current class as primary query
      */
     public function useSeObjectHasFileQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinSeObjectHasFile($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'SeObjectHasFile', '\StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'SeObjectHasFile', '\StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery');
     }
 
     /**
@@ -824,13 +824,13 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery A secondary query class using the current class as primary query
+     * @return   \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nQuery A secondary query class using the current class as primary query
      */
     public function useSeMediaFileI18nQuery($relationAlias = null, $joinType = 'LEFT JOIN')
     {
         return $this
             ->joinSeMediaFileI18n($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'SeMediaFileI18n', '\StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'SeMediaFileI18n', '\StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nQuery');
     }
 
     /**
@@ -920,7 +920,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
     {
         return $this
             ->joinI18n($locale, $relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'SeMediaFileI18n', 'StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'SeMediaFileI18n', 'StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nQuery');
     }
 
     // timestampable behavior

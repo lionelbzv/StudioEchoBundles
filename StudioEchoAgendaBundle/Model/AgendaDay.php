@@ -1,7 +1,7 @@
 <?php
-namespace StudioEcho\StudioEchoAgendaBundle\Model;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\Model;
 
-use StudioEcho\StudioEchoAgendaBundle\Model\AgendaEventInterface;
+use StudioEchoBundles\StudioEchoBundlesAgendaBundle\Model\AgendaEventInterface;
 
 /**
  * Modélisation d'un jour de l'agenda

@@ -5,7 +5,7 @@
    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="twig.extension.se.gmaps" class="StudioEcho\StudioEchoGmapsBundle\Twig\Extension\GmapsWidgetExtension" public="true">
+        <service id="twig.extension.se.gmaps" class="StudioEchoBundles\StudioEchoBundlesGmapsBundle\Twig\Extension\GmapsWidgetExtension" public="true">
             <tag name="twig.extension" />
             <argument type="service" id="service_container" />
             <argument type="service" id="templating"/>

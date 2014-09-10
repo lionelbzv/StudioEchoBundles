@@ -1,9 +1,9 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class StudioEchoMediaBundle extends Bundle
+class StudioEchoBundlesMediaBundle extends Bundle
 {
 }

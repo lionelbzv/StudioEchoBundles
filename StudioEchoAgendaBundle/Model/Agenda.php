@@ -1,8 +1,8 @@
 <?php
-namespace StudioEcho\StudioEchoAgendaBundle\Model;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\Model;
 
-use StudioEcho\StudioEchoAgendaBundle\Model\AgendaMonth;
-use StudioEcho\StudioEchoAgendaBundle\Model\AgendaEventInterface;
+use StudioEchoBundles\StudioEchoBundlesAgendaBundle\Model\AgendaMonth;
+use StudioEchoBundles\StudioEchoBundlesAgendaBundle\Model\AgendaEventInterface;
 
 /**
  * Modélisation d'un agenda

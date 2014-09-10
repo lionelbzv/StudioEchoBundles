@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Lib;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Lib;
 
 /**
  * Handle file uploads via XMLHttpRequest

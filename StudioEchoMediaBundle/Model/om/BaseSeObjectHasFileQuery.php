@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \Criteria;
 use \Exception;
@@ -12,11 +12,11 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery;
 
 /**
  * @method SeObjectHasFileQuery orderBySeMediaObjectId($order = Criteria::ASC) Order by the se_media_object_id column
@@ -73,7 +73,7 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
             $dbName = 'default';
         }
         if (null === $modelName) {
-            $modelName = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeObjectHasFile';
+            $modelName = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeObjectHasFile';
         }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -533,13 +533,13 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectQuery A secondary query class using the current class as primary query
+     * @return   \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectQuery A secondary query class using the current class as primary query
      */
     public function useSeMediaObjectQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinSeMediaObject($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'SeMediaObject', '\StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'SeMediaObject', '\StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectQuery');
     }
 
     /**
@@ -609,13 +609,13 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery A secondary query class using the current class as primary query
+     * @return   \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery A secondary query class using the current class as primary query
      */
     public function useSeMediaFileQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinSeMediaFile($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'SeMediaFile', '\StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'SeMediaFile', '\StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery');
     }
 
     /**

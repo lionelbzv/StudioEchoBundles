@@ -1,6 +1,6 @@
 <?php
 // src/Acme/DemoBundle/Twig/AcmeExtension.php
-namespace StudioEcho\StudioEchoIvoryLuceneIndexationBundle\Twig;
+namespace StudioEchoBundles\StudioEchoBundlesIvoryLuceneIndexationBundle\Twig;
 
 class SeiliExtension extends \Twig_Extension
 {

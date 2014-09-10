@@ -1,5 +1,5 @@
 parameters:
-#    studio_echo_agenda.example.class: StudioEcho\StudioEchoAgendaBundle\Example
+#    studio_echo_agenda.example.class: StudioEchoBundles\StudioEchoBundlesAgendaBundle\Example
 
 services:
 #    studio_echo_agenda.example:

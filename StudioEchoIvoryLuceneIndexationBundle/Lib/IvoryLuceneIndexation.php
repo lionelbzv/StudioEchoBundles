@@ -1,5 +1,5 @@
 <?php
-namespace StudioEcho\StudioEchoIvoryLuceneIndexationBundle\Lib;
+namespace StudioEchoBundles\StudioEchoBundlesIvoryLuceneIndexationBundle\Lib;
 
 use ZendSearch\Lucene\Document;
 use ZendSearch\Lucene\Document\Field;

@@ -1,9 +1,9 @@
 <?php
 
-namespace StudioEcho\StudioEchoGmapsBundle;
+namespace StudioEchoBundles\StudioEchoBundlesGmapsBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class StudioEchoGmapsBundle extends Bundle
+class StudioEchoBundlesGmapsBundle extends Bundle
 {
 }

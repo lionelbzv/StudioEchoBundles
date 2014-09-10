@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoAgendaBundle\Controller;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -8,6 +8,6 @@ class DefaultController extends Controller
 {
     public function indexAction($name)
     {
-        return $this->render('StudioEchoAgendaBundle:Default:index.html.twig', array('name' => $name));
+        return $this->render('StudioEchoBundlesAgendaBundle:Default:index.html.twig', array('name' => $name));
     }
 }

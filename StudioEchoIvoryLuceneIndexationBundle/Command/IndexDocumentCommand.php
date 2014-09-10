@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace StudioEcho\StudioEchoIvoryLuceneIndexationBundle\Command;
+namespace StudioEchoBundles\StudioEchoBundlesIvoryLuceneIndexationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-use StudioEcho\StudioEchoIvoryLuceneIndexationBundle\Lib\IvoryLuceneIndexation;
+use StudioEchoBundles\StudioEchoBundlesIvoryLuceneIndexationBundle\Lib\IvoryLuceneIndexation;
 
 
 /**

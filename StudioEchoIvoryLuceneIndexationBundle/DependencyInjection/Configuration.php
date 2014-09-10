@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoIvoryLuceneIndexationBundle\DependencyInjection;
+namespace StudioEchoBundles\StudioEchoBundlesIvoryLuceneIndexationBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

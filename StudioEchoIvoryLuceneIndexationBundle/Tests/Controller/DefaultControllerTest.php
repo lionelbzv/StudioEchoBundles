@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoIvoryLuceneIndexationBundle\Tests\Controller;
+namespace StudioEchoBundles\StudioEchoBundlesIvoryLuceneIndexationBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\map;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map;
 
 use \RelationMap;
 use \TableMap;
@@ -16,7 +16,7 @@ use \TableMap;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  *
- * @package    propel.generator.src.StudioEcho.StudioEchoMediaBundle.Model.map
+ * @package    propel.generator.src.StudioEchoBundles.StudioEchoBundlesMediaBundle.Model.map
  */
 class SeMediaFileI18nTableMap extends TableMap
 {
@@ -24,7 +24,7 @@ class SeMediaFileI18nTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src.StudioEcho.StudioEchoMediaBundle.Model.map.SeMediaFileI18nTableMap';
+    const CLASS_NAME = 'src.StudioEchoBundles.StudioEchoBundlesMediaBundle.Model.map.SeMediaFileI18nTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -38,8 +38,8 @@ class SeMediaFileI18nTableMap extends TableMap
         // attributes
         $this->setName('se_media_file_i18n');
         $this->setPhpName('SeMediaFileI18n');
-        $this->setClassname('StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFileI18n');
-        $this->setPackage('src.StudioEcho.StudioEchoMediaBundle.Model');
+        $this->setClassname('StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFileI18n');
+        $this->setPackage('src.StudioEchoBundles.StudioEchoBundlesMediaBundle.Model');
         $this->setUseIdGenerator(false);
         // columns
         $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'se_media_file', 'id', true, null, null);
@@ -56,7 +56,7 @@ class SeMediaFileI18nTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('SeMediaFile', 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFile', RelationMap::MANY_TO_ONE, array('id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('SeMediaFile', 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFile', RelationMap::MANY_TO_ONE, array('id' => 'id', ), 'CASCADE', null);
     } // buildRelations()
 
 } // SeMediaFileI18nTableMap

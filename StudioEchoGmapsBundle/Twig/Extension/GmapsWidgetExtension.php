@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace StudioEcho\StudioEchoGmapsBundle\Twig\Extension;
+namespace StudioEchoBundles\StudioEchoBundlesGmapsBundle\Twig\Extension;
 
 use FOS\FacebookBundle\Templating\Helper\FacebookHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -74,7 +74,7 @@ class GmapsWidgetExtension extends \Twig_Extension
         $region = $apiInit['region'];
         $version = $apiInit['version'];
 
-        return $this->templating->render('StudioEchoGmapsBundle:Form:init.js.twig', array(
+        return $this->templating->render('StudioEchoBundlesGmapsBundle:Form:init.js.twig', array(
                     'sensor' => $sensor,
                     'apiKey' => $apiKey,
                     'region' => $region,
@@ -89,7 +89,7 @@ class GmapsWidgetExtension extends \Twig_Extension
     {
         $this->logger->info('*** renderGmapsWidget');
 
-        return $this->templating->render('StudioEchoGmapsBundle:Form:widget.html.twig', array());
+        return $this->templating->render('StudioEchoBundlesGmapsBundle:Form:widget.html.twig', array());
     }
 
     /**
@@ -111,7 +111,7 @@ class GmapsWidgetExtension extends \Twig_Extension
         $zoomLevel = $mapOptions['zoom_level'];
         $mapTypeId = $mapOptions['map_type_id'];
 
-        return $this->templating->render('StudioEchoGmapsBundle:Form:pickercode.js.twig', array(
+        return $this->templating->render('StudioEchoBundlesGmapsBundle:Form:pickercode.js.twig', array(
                     'scroolWheel' => $scroolWheel,
                     'center' => $center,
                     'zoomLevel' => $zoomLevel,

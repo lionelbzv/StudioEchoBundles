@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \BasePeer;
 use \Criteria;
@@ -9,10 +9,10 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\map\SeMediaObjectTableMap;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map\SeMediaObjectTableMap;
 
 abstract class BaseSeMediaObjectPeer
 {
@@ -24,10 +24,10 @@ abstract class BaseSeMediaObjectPeer
     const TABLE_NAME = 'se_media_object';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaObject';
+    const OM_CLASS = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaObject';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'StudioEcho\\StudioEchoMediaBundle\\Model\\map\\SeMediaObjectTableMap';
+    const TM_CLASS = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\map\\SeMediaObjectTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 5;
@@ -499,7 +499,7 @@ abstract class BaseSeMediaObjectPeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeMediaObjectPeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeMediaObjectPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \StudioEcho\StudioEchoMediaBundle\Model\map\SeMediaObjectTableMap());
+        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map\SeMediaObjectTableMap());
       }
     }
 

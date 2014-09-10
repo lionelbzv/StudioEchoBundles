@@ -1,5 +1,5 @@
 <?php
-namespace StudioEcho\StudioEchoAgendaBundle\Model;
+namespace StudioEchoBundles\StudioEchoBundlesAgendaBundle\Model;
 
 /**
  * Modélisation d'un jour de l'agenda

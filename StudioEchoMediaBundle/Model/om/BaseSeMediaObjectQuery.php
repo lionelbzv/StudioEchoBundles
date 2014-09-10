@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \Criteria;
 use \Exception;
@@ -12,11 +12,11 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFile;
 
 /**
  * @method SeMediaObjectQuery orderById($order = Criteria::ASC) Order by the id column
@@ -68,7 +68,7 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
             $dbName = 'default';
         }
         if (null === $modelName) {
-            $modelName = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaObject';
+            $modelName = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaObject';
         }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -510,13 +510,13 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery A secondary query class using the current class as primary query
+     * @return   \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery A secondary query class using the current class as primary query
      */
     public function useSeObjectHasFileQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinSeObjectHasFile($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'SeObjectHasFile', '\StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'SeObjectHasFile', '\StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery');
     }
 
     /**

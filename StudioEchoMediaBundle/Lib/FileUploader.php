@@ -1,9 +1,9 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Lib;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Lib;
 
-use StudioEcho\StudioEchoMediaBundle\Lib\UploadedFileForm;
-use StudioEcho\StudioEchoMediaBundle\Lib\UploadedFileXhr;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Lib\UploadedFileForm;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Lib\UploadedFileXhr;
 
 /**
  * Class that encapsulates the file-upload internals

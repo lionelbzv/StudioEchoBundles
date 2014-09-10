@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoGmapsBundle\Controller;
+namespace StudioEchoBundles\StudioEchoBundlesGmapsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

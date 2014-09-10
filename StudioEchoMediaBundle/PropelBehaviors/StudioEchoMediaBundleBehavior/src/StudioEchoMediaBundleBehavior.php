@@ -5,7 +5,7 @@
  *
  * @author Studio Echo / Lionel Bouzonville
  */
-class StudioEchoMediaBundleBehavior extends Behavior {
+class StudioEchoBundlesMediaBundleBehavior extends Behavior {
     /**
      * Create a new SeMediaObject instance
      *
@@ -14,7 +14,7 @@ class StudioEchoMediaBundleBehavior extends Behavior {
     public function postInsert()
     {
       return "
-        \$seMediaObject = new \StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject();
+        \$seMediaObject = new \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject();
         \$seMediaObject->setObjectId(\$this->getId());
         \$seMediaObject->setObjectClassname(get_class(\$this));
         \$seMediaObject->save(\$con);
@@ -29,7 +29,7 @@ class StudioEchoMediaBundleBehavior extends Behavior {
     public function postDelete()
     {
       return "
-        \$seMediaObject = \StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectQuery::create()->filterByObjectClassname(get_class(\$this))->filterByObjectId(\$this->getId())->findOne();
+        \$seMediaObject = \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectQuery::create()->filterByObjectClassname(get_class(\$this))->filterByObjectId(\$this->getId())->findOne();
         \$seMediaObject->delete(\$con);
         ";
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoGmapsBundle\DependencyInjection;
+namespace StudioEchoBundles\StudioEchoBundlesGmapsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

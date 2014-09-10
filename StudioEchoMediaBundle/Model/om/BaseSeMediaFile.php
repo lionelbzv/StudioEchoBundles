@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \BaseObject;
 use \BasePeer;
@@ -15,22 +15,22 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18n;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObject;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaObjectQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18n;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObject;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaObjectQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFileQuery;
 
 abstract class BaseSeMediaFile extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFilePeer';
+    const PEER = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFilePeer';
 
     /**
      * The Peer class.

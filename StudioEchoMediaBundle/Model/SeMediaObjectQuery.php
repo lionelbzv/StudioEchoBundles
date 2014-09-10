@@ -1,8 +1,8 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model;
 
-use StudioEcho\StudioEchoMediaBundle\Model\om\BaseSeMediaObjectQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om\BaseSeMediaObjectQuery;
 
 class SeMediaObjectQuery extends BaseSeMediaObjectQuery
 {

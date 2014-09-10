@@ -1,15 +1,15 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Lib;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Lib;
 
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery;
 
 /*
  * Gestionnaire / méthodes statiques renvoyant les objets médias.
  * 
  * @author Lionel Bouzonville / Studio Echo
  */
-class StudioEchoMediaManager {
+class StudioEchoBundlesMediaManager {
     /**
      * Retourne 1 fichier média associé à l'objet identifié en paramètre.
      * 

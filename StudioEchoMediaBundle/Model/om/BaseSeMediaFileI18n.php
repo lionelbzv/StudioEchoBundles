@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \BaseObject;
 use \BasePeer;
@@ -11,18 +11,18 @@ use \Persistent;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18n;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nPeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18n;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nQuery;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileQuery;
 
 abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFileI18nPeer';
+    const PEER = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFileI18nPeer';
 
     /**
      * The Peer class.

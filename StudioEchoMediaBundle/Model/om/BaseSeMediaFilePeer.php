@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model\om;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om;
 
 use \BasePeer;
 use \Criteria;
@@ -9,11 +9,11 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFile;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFileI18nPeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeMediaFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\SeObjectHasFilePeer;
-use StudioEcho\StudioEchoMediaBundle\Model\map\SeMediaFileTableMap;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFile;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFileI18nPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeMediaFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\SeObjectHasFilePeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map\SeMediaFileTableMap;
 
 abstract class BaseSeMediaFilePeer
 {
@@ -25,10 +25,10 @@ abstract class BaseSeMediaFilePeer
     const TABLE_NAME = 'se_media_file';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'StudioEcho\\StudioEchoMediaBundle\\Model\\SeMediaFile';
+    const OM_CLASS = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\SeMediaFile';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'StudioEcho\\StudioEchoMediaBundle\\Model\\map\\SeMediaFileTableMap';
+    const TM_CLASS = 'StudioEchoBundles\\StudioEchoBundlesMediaBundle\\Model\\map\\SeMediaFileTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 11;
@@ -540,7 +540,7 @@ abstract class BaseSeMediaFilePeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeMediaFilePeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeMediaFilePeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \StudioEcho\StudioEchoMediaBundle\Model\map\SeMediaFileTableMap());
+        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\map\SeMediaFileTableMap());
       }
     }
 

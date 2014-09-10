@@ -1,5 +1,5 @@
 <?php
-namespace StudioEcho\StudioEchoMediaBundle\Twig\Extension;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Twig\Extension;
 
 class CheckMimeTypeExtension extends \Twig_Extension
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace StudioEcho\StudioEchoMediaBundle\Model;
+namespace StudioEchoBundles\StudioEchoBundlesMediaBundle\Model;
 
-use StudioEcho\StudioEchoMediaBundle\Model\om\BaseSeMediaObjectPeer;
+use StudioEchoBundles\StudioEchoBundlesMediaBundle\Model\om\BaseSeMediaObjectPeer;
 
 class SeMediaObjectPeer extends BaseSeMediaObjectPeer
 {
