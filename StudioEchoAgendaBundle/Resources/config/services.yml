@@ -1,0 +1,7 @@
+parameters:
+#    studio_echo_agenda.example.class: StudioEchoBundles\StudioEchoAgendaBundle\Example
+
+services:
+#    studio_echo_agenda.example:
+#        class: %studio_echo_agenda.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
