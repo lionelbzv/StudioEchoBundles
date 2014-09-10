@@ -1,7 +1,5 @@
 <?php
 
-namespace StudioEchoBundles\StudioEchoMediaBundle\PropelBehaviors;
-
 /**
  * Create / Delete SeMediaObject associated with current object
  *

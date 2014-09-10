@@ -16,7 +16,7 @@
                     <img src='/uploads/{{ mediaFile.name }}' class="{% if mediaFile.landscape %}landscape{% else %}portrait{% endif %}"/>
                   {% else %}
                     {% set iconFileName = mediaFile.mimeType | mimeTypeIcon %}   
-                    <img src='{{ asset("bundles/media/images/"~iconFileName) }}' />
+                    <img src='{{ asset("bundles/studioechomedia/images/"~iconFileName) }}' />
                   {% endif %}
                   <strong>{{ mediaFile.name | slice(0, 9) }}{% if mediaFile.name | length > 10 %}...{% endif %}</strong>
               {% endif %}
@@ -32,7 +32,7 @@
             <a class="fileblock-delete-button"></a>
           </div>
           <div class="fileblock-header-edit">
-            <a class="fileblock-edit-button"><img src="{{ asset('bundles/media/images/medialist_dropdown.png') }}" alt="Ouvrir / Fermer" width="41" height="39"></a>
+            <a class="fileblock-edit-button"><img src="{{ asset('bundles/studioechomedia/images/medialist_dropdown.png') }}" alt="Ouvrir / Fermer" width="41" height="39"></a>
           </div>
         </div>
         <div class="fileblock-edit" id="fileblock-edit-{{ mediaFile.id }}">

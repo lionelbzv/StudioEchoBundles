@@ -1,8 +1,5 @@
 <?php
 
-namespace StudioEchoBundles\StudioEchoIvoryLuceneIndexationBundle\PropelBehaviors;
-
-
 /**
  * Propel behavior for making models indexable und searchable with IvoryLuceneSearchBundle.
  *

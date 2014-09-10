@@ -1,7 +1,5 @@
 <?php
 
-namespace StudioEchoBundles\StudioEchoGmapsBundle\PropelBehaviors;
-
 /**
  * Add gmaps columns for managing geoloc w. Gmaps picker
  *
