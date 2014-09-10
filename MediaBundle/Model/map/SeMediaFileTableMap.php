@@ -84,9 +84,6 @@ class SeMediaFileTableMap extends TableMap
   'default_locale' => NULL,
   'locale_alias' => '',
 ),
-            'online' =>  array (
-  'online_column' => 'online',
-),
             'timestampable' =>  array (
   'create_column' => 'created_at',
   'update_column' => 'updated_at',

@@ -14,8 +14,7 @@
   <table name="se_media_file">
     <behavior name="i18n">
       <parameter name="i18n_columns" value="title, name, description, copyright" />
-    </behavior>    
-    <behavior name="online" />
+    </behavior>
     <behavior name="timestampable" />
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="category_id" type="integer" required="true" default="1"/>
@@ -29,6 +28,7 @@
     <column name="size" type="integer" />
     <column name="height" type="integer" />
     <column name="width" type="integer" />
+    <column name="online" type="boolean" />
   </table>
   
   <table name="se_object_has_file" isCrossRef="true">
