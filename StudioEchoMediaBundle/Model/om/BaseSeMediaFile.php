@@ -60,6 +60,12 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
     protected $category_id;
 
     /**
+     * The value for the name field.
+     * @var        string
+     */
+    protected $name;
+
+    /**
      * The value for the extension field.
      * @var        string
      */
@@ -94,12 +100,6 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      * @var        int
      */
     protected $width;
-
-    /**
-     * The value for the online field.
-     * @var        boolean
-     */
-    protected $online;
 
     /**
      * The value for the created_at field.
@@ -156,7 +156,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      * Current locale
      * @var        string
      */
-    protected $currentLocale = 'en_US';
+    protected $currentLocale = 'fr_FR';
 
     /**
      * Current translation objects
@@ -226,6 +226,17 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [name] column value.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+
+        return $this->name;
+    }
+
+    /**
      * Get the [extension] column value.
      *
      * @return string
@@ -289,17 +300,6 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
     {
 
         return $this->width;
-    }
-
-    /**
-     * Get the [online] column value.
-     *
-     * @return boolean
-     */
-    public function getOnline()
-    {
-
-        return $this->online;
     }
 
     /**
@@ -423,6 +423,27 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
 
         return $this;
     } // setCategoryId()
+
+    /**
+     * Set the value of [name] column.
+     *
+     * @param  string $v new value
+     * @return SeMediaFile The current object (for fluent API support)
+     */
+    public function setName($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[] = SeMediaFilePeer::NAME;
+        }
+
+
+        return $this;
+    } // setName()
 
     /**
      * Set the value of [extension] column.
@@ -551,35 +572,6 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
     } // setWidth()
 
     /**
-     * Sets the value of the [online] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param boolean|integer|string $v The new value
-     * @return SeMediaFile The current object (for fluent API support)
-     */
-    public function setOnline($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->online !== $v) {
-            $this->online = $v;
-            $this->modifiedColumns[] = SeMediaFilePeer::ONLINE;
-        }
-
-
-        return $this;
-    } // setOnline()
-
-    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -663,13 +655,13 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->category_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->extension = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->type = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->mime_type = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->size = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->height = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-            $this->width = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-            $this->online = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->extension = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->type = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->mime_type = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->size = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->height = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->width = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
             $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->updated_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
@@ -975,6 +967,9 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
         if ($this->isColumnModified(SeMediaFilePeer::CATEGORY_ID)) {
             $modifiedColumns[':p' . $index++]  = '`category_id`';
         }
+        if ($this->isColumnModified(SeMediaFilePeer::NAME)) {
+            $modifiedColumns[':p' . $index++]  = '`name`';
+        }
         if ($this->isColumnModified(SeMediaFilePeer::EXTENSION)) {
             $modifiedColumns[':p' . $index++]  = '`extension`';
         }
@@ -992,9 +987,6 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(SeMediaFilePeer::WIDTH)) {
             $modifiedColumns[':p' . $index++]  = '`width`';
-        }
-        if ($this->isColumnModified(SeMediaFilePeer::ONLINE)) {
-            $modifiedColumns[':p' . $index++]  = '`online`';
         }
         if ($this->isColumnModified(SeMediaFilePeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
@@ -1019,6 +1011,9 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
                     case '`category_id`':
                         $stmt->bindValue($identifier, $this->category_id, PDO::PARAM_INT);
                         break;
+                    case '`name`':
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
                     case '`extension`':
                         $stmt->bindValue($identifier, $this->extension, PDO::PARAM_STR);
                         break;
@@ -1036,9 +1031,6 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
                         break;
                     case '`width`':
                         $stmt->bindValue($identifier, $this->width, PDO::PARAM_INT);
-                        break;
-                    case '`online`':
-                        $stmt->bindValue($identifier, (int) $this->online, PDO::PARAM_INT);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1203,25 +1195,25 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
                 return $this->getCategoryId();
                 break;
             case 2:
-                return $this->getExtension();
+                return $this->getName();
                 break;
             case 3:
-                return $this->getType();
+                return $this->getExtension();
                 break;
             case 4:
-                return $this->getMimeType();
+                return $this->getType();
                 break;
             case 5:
-                return $this->getSize();
+                return $this->getMimeType();
                 break;
             case 6:
-                return $this->getHeight();
+                return $this->getSize();
                 break;
             case 7:
-                return $this->getWidth();
+                return $this->getHeight();
                 break;
             case 8:
-                return $this->getOnline();
+                return $this->getWidth();
                 break;
             case 9:
                 return $this->getCreatedAt();
@@ -1260,13 +1252,13 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getCategoryId(),
-            $keys[2] => $this->getExtension(),
-            $keys[3] => $this->getType(),
-            $keys[4] => $this->getMimeType(),
-            $keys[5] => $this->getSize(),
-            $keys[6] => $this->getHeight(),
-            $keys[7] => $this->getWidth(),
-            $keys[8] => $this->getOnline(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getExtension(),
+            $keys[4] => $this->getType(),
+            $keys[5] => $this->getMimeType(),
+            $keys[6] => $this->getSize(),
+            $keys[7] => $this->getHeight(),
+            $keys[8] => $this->getWidth(),
             $keys[9] => $this->getCreatedAt(),
             $keys[10] => $this->getUpdatedAt(),
         );
@@ -1323,25 +1315,25 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
                 $this->setCategoryId($value);
                 break;
             case 2:
-                $this->setExtension($value);
+                $this->setName($value);
                 break;
             case 3:
-                $this->setType($value);
+                $this->setExtension($value);
                 break;
             case 4:
-                $this->setMimeType($value);
+                $this->setType($value);
                 break;
             case 5:
-                $this->setSize($value);
+                $this->setMimeType($value);
                 break;
             case 6:
-                $this->setHeight($value);
+                $this->setSize($value);
                 break;
             case 7:
-                $this->setWidth($value);
+                $this->setHeight($value);
                 break;
             case 8:
-                $this->setOnline($value);
+                $this->setWidth($value);
                 break;
             case 9:
                 $this->setCreatedAt($value);
@@ -1375,13 +1367,13 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setCategoryId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setExtension($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setType($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setMimeType($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setSize($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setHeight($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setWidth($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setOnline($arr[$keys[8]]);
+        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setExtension($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setType($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setMimeType($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setSize($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setHeight($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setWidth($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setUpdatedAt($arr[$keys[10]]);
     }
@@ -1397,13 +1389,13 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
 
         if ($this->isColumnModified(SeMediaFilePeer::ID)) $criteria->add(SeMediaFilePeer::ID, $this->id);
         if ($this->isColumnModified(SeMediaFilePeer::CATEGORY_ID)) $criteria->add(SeMediaFilePeer::CATEGORY_ID, $this->category_id);
+        if ($this->isColumnModified(SeMediaFilePeer::NAME)) $criteria->add(SeMediaFilePeer::NAME, $this->name);
         if ($this->isColumnModified(SeMediaFilePeer::EXTENSION)) $criteria->add(SeMediaFilePeer::EXTENSION, $this->extension);
         if ($this->isColumnModified(SeMediaFilePeer::TYPE)) $criteria->add(SeMediaFilePeer::TYPE, $this->type);
         if ($this->isColumnModified(SeMediaFilePeer::MIME_TYPE)) $criteria->add(SeMediaFilePeer::MIME_TYPE, $this->mime_type);
         if ($this->isColumnModified(SeMediaFilePeer::SIZE)) $criteria->add(SeMediaFilePeer::SIZE, $this->size);
         if ($this->isColumnModified(SeMediaFilePeer::HEIGHT)) $criteria->add(SeMediaFilePeer::HEIGHT, $this->height);
         if ($this->isColumnModified(SeMediaFilePeer::WIDTH)) $criteria->add(SeMediaFilePeer::WIDTH, $this->width);
-        if ($this->isColumnModified(SeMediaFilePeer::ONLINE)) $criteria->add(SeMediaFilePeer::ONLINE, $this->online);
         if ($this->isColumnModified(SeMediaFilePeer::CREATED_AT)) $criteria->add(SeMediaFilePeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(SeMediaFilePeer::UPDATED_AT)) $criteria->add(SeMediaFilePeer::UPDATED_AT, $this->updated_at);
 
@@ -1470,13 +1462,13 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setCategoryId($this->getCategoryId());
+        $copyObj->setName($this->getName());
         $copyObj->setExtension($this->getExtension());
         $copyObj->setType($this->getType());
         $copyObj->setMimeType($this->getMimeType());
         $copyObj->setSize($this->getSize());
         $copyObj->setHeight($this->getHeight());
         $copyObj->setWidth($this->getWidth());
-        $copyObj->setOnline($this->getOnline());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -2247,13 +2239,13 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->category_id = null;
+        $this->name = null;
         $this->extension = null;
         $this->type = null;
         $this->mime_type = null;
         $this->size = null;
         $this->height = null;
         $this->width = null;
-        $this->online = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;
@@ -2299,7 +2291,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
         } // if ($deep)
 
         // i18n behavior
-        $this->currentLocale = 'en_US';
+        $this->currentLocale = 'fr_FR';
         $this->currentTranslations = null;
 
         if ($this->collSeObjectHasFiles instanceof PropelCollection) {
@@ -2345,7 +2337,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      *
      * @return    SeMediaFile The current object (for fluent API support)
      */
-    public function setLocale($locale = 'en_US')
+    public function setLocale($locale = 'fr_FR')
     {
         $this->currentLocale = $locale;
 
@@ -2369,7 +2361,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      * @param     PropelPDO $con an optional connection object
      *
      * @return SeMediaFileI18n */
-    public function getTranslation($locale = 'en_US', PropelPDO $con = null)
+    public function getTranslation($locale = 'fr_FR', PropelPDO $con = null)
     {
         if (!isset($this->currentTranslations[$locale])) {
             if (null !== $this->collSeMediaFileI18ns) {
@@ -2404,7 +2396,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      *
      * @return    SeMediaFile The current object (for fluent API support)
      */
-    public function removeTranslation($locale = 'en_US', PropelPDO $con = null)
+    public function removeTranslation($locale = 'fr_FR', PropelPDO $con = null)
     {
         if (!$this->isNew()) {
             SeMediaFileI18nQuery::create()
@@ -2461,30 +2453,6 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
 
 
         /**
-         * Get the [name] column value.
-         *
-         * @return string
-         */
-        public function getName()
-        {
-        return $this->getCurrentTranslation()->getName();
-    }
-
-
-        /**
-         * Set the value of [name] column.
-         *
-         * @param  string $v new value
-         * @return SeMediaFileI18n The current object (for fluent API support)
-         */
-        public function setName($v)
-        {    $this->getCurrentTranslation()->setName($v);
-
-        return $this;
-    }
-
-
-        /**
          * Get the [description] column value.
          *
          * @return string
@@ -2527,6 +2495,30 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
          */
         public function setCopyright($v)
         {    $this->getCurrentTranslation()->setCopyright($v);
+
+        return $this;
+    }
+
+
+        /**
+         * Get the [online] column value.
+         *
+         * @return boolean
+         */
+        public function getOnline()
+        {
+        return $this->getCurrentTranslation()->getOnline();
+    }
+
+
+        /**
+         * Set the value of [online] column.
+         *
+         * @param  boolean $v new value
+         * @return SeMediaFileI18n The current object (for fluent API support)
+         */
+        public function setOnline($v)
+        {    $this->getCurrentTranslation()->setOnline($v);
 
         return $this;
     }

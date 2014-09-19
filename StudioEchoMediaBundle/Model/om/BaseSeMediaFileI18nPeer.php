@@ -47,14 +47,14 @@ abstract class BaseSeMediaFileI18nPeer
     /** the column name for the title field */
     const TITLE = 'se_media_file_i18n.title';
 
-    /** the column name for the name field */
-    const NAME = 'se_media_file_i18n.name';
-
     /** the column name for the description field */
     const DESCRIPTION = 'se_media_file_i18n.description';
 
     /** the column name for the copyright field */
     const COPYRIGHT = 'se_media_file_i18n.copyright';
+
+    /** the column name for the online field */
+    const ONLINE = 'se_media_file_i18n.online';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -75,11 +75,11 @@ abstract class BaseSeMediaFileI18nPeer
      * e.g. SeMediaFileI18nPeer::$fieldNames[SeMediaFileI18nPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Locale', 'Title', 'Name', 'Description', 'Copyright', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'locale', 'title', 'name', 'description', 'copyright', ),
-        BasePeer::TYPE_COLNAME => array (SeMediaFileI18nPeer::ID, SeMediaFileI18nPeer::LOCALE, SeMediaFileI18nPeer::TITLE, SeMediaFileI18nPeer::NAME, SeMediaFileI18nPeer::DESCRIPTION, SeMediaFileI18nPeer::COPYRIGHT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LOCALE', 'TITLE', 'NAME', 'DESCRIPTION', 'COPYRIGHT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'locale', 'title', 'name', 'description', 'copyright', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Locale', 'Title', 'Description', 'Copyright', 'Online', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'locale', 'title', 'description', 'copyright', 'online', ),
+        BasePeer::TYPE_COLNAME => array (SeMediaFileI18nPeer::ID, SeMediaFileI18nPeer::LOCALE, SeMediaFileI18nPeer::TITLE, SeMediaFileI18nPeer::DESCRIPTION, SeMediaFileI18nPeer::COPYRIGHT, SeMediaFileI18nPeer::ONLINE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LOCALE', 'TITLE', 'DESCRIPTION', 'COPYRIGHT', 'ONLINE', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'locale', 'title', 'description', 'copyright', 'online', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
@@ -90,11 +90,11 @@ abstract class BaseSeMediaFileI18nPeer
      * e.g. SeMediaFileI18nPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Locale' => 1, 'Title' => 2, 'Name' => 3, 'Description' => 4, 'Copyright' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'locale' => 1, 'title' => 2, 'name' => 3, 'description' => 4, 'copyright' => 5, ),
-        BasePeer::TYPE_COLNAME => array (SeMediaFileI18nPeer::ID => 0, SeMediaFileI18nPeer::LOCALE => 1, SeMediaFileI18nPeer::TITLE => 2, SeMediaFileI18nPeer::NAME => 3, SeMediaFileI18nPeer::DESCRIPTION => 4, SeMediaFileI18nPeer::COPYRIGHT => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LOCALE' => 1, 'TITLE' => 2, 'NAME' => 3, 'DESCRIPTION' => 4, 'COPYRIGHT' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'locale' => 1, 'title' => 2, 'name' => 3, 'description' => 4, 'copyright' => 5, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Locale' => 1, 'Title' => 2, 'Description' => 3, 'Copyright' => 4, 'Online' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'locale' => 1, 'title' => 2, 'description' => 3, 'copyright' => 4, 'online' => 5, ),
+        BasePeer::TYPE_COLNAME => array (SeMediaFileI18nPeer::ID => 0, SeMediaFileI18nPeer::LOCALE => 1, SeMediaFileI18nPeer::TITLE => 2, SeMediaFileI18nPeer::DESCRIPTION => 3, SeMediaFileI18nPeer::COPYRIGHT => 4, SeMediaFileI18nPeer::ONLINE => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LOCALE' => 1, 'TITLE' => 2, 'DESCRIPTION' => 3, 'COPYRIGHT' => 4, 'ONLINE' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'locale' => 1, 'title' => 2, 'description' => 3, 'copyright' => 4, 'online' => 5, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
@@ -172,16 +172,16 @@ abstract class BaseSeMediaFileI18nPeer
             $criteria->addSelectColumn(SeMediaFileI18nPeer::ID);
             $criteria->addSelectColumn(SeMediaFileI18nPeer::LOCALE);
             $criteria->addSelectColumn(SeMediaFileI18nPeer::TITLE);
-            $criteria->addSelectColumn(SeMediaFileI18nPeer::NAME);
             $criteria->addSelectColumn(SeMediaFileI18nPeer::DESCRIPTION);
             $criteria->addSelectColumn(SeMediaFileI18nPeer::COPYRIGHT);
+            $criteria->addSelectColumn(SeMediaFileI18nPeer::ONLINE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.locale');
             $criteria->addSelectColumn($alias . '.title');
-            $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.copyright');
+            $criteria->addSelectColumn($alias . '.online');
         }
     }
 

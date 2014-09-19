@@ -44,13 +44,13 @@ class SeMediaFileTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('category_id', 'CategoryId', 'INTEGER', true, null, 1);
+        $this->addColumn('name', 'Name', 'VARCHAR', false, 250, null);
         $this->addColumn('extension', 'Extension', 'VARCHAR', false, 10, null);
         $this->addColumn('type', 'Type', 'VARCHAR', false, 250, null);
         $this->addColumn('mime_type', 'MimeType', 'VARCHAR', false, 250, null);
         $this->addColumn('size', 'Size', 'INTEGER', false, null, null);
         $this->addColumn('height', 'Height', 'INTEGER', false, null, null);
         $this->addColumn('width', 'Width', 'INTEGER', false, null, null);
-        $this->addColumn('online', 'Online', 'BOOLEAN', false, 1, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators
@@ -78,10 +78,10 @@ class SeMediaFileTableMap extends TableMap
             'i18n' =>  array (
   'i18n_table' => '%TABLE%_i18n',
   'i18n_phpname' => '%PHPNAME%I18n',
-  'i18n_columns' => 'title, name, description, copyright',
+  'i18n_columns' => 'title, description, copyright, online',
   'i18n_pk_name' => NULL,
   'locale_column' => 'locale',
-  'default_locale' => NULL,
+  'default_locale' => 'fr_FR',
   'locale_alias' => '',
 ),
             'timestampable' =>  array (

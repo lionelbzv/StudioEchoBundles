@@ -46,7 +46,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
 
     /**
      * The value for the locale field.
-     * Note: this column has a database default value of: 'en_US'
+     * Note: this column has a database default value of: 'fr_FR'
      * @var        string
      */
     protected $locale;
@@ -56,12 +56,6 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      * @var        string
      */
     protected $title;
-
-    /**
-     * The value for the name field.
-     * @var        string
-     */
-    protected $name;
 
     /**
      * The value for the description field.
@@ -74,6 +68,12 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      * @var        string
      */
     protected $copyright;
+
+    /**
+     * The value for the online field.
+     * @var        boolean
+     */
+    protected $online;
 
     /**
      * @var        SeMediaFile
@@ -108,7 +108,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->locale = 'en_US';
+        $this->locale = 'fr_FR';
     }
 
     /**
@@ -155,17 +155,6 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [name] column value.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-
-        return $this->name;
-    }
-
-    /**
      * Get the [description] column value.
      *
      * @return string
@@ -185,6 +174,17 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     {
 
         return $this->copyright;
+    }
+
+    /**
+     * Get the [online] column value.
+     *
+     * @return boolean
+     */
+    public function getOnline()
+    {
+
+        return $this->online;
     }
 
     /**
@@ -255,27 +255,6 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     } // setTitle()
 
     /**
-     * Set the value of [name] column.
-     *
-     * @param  string $v new value
-     * @return SeMediaFileI18n The current object (for fluent API support)
-     */
-    public function setName($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[] = SeMediaFileI18nPeer::NAME;
-        }
-
-
-        return $this;
-    } // setName()
-
-    /**
      * Set the value of [description] column.
      *
      * @param  string $v new value
@@ -318,6 +297,35 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     } // setCopyright()
 
     /**
+     * Sets the value of the [online] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return SeMediaFileI18n The current object (for fluent API support)
+     */
+    public function setOnline($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->online !== $v) {
+            $this->online = $v;
+            $this->modifiedColumns[] = SeMediaFileI18nPeer::ONLINE;
+        }
+
+
+        return $this;
+    } // setOnline()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -327,7 +335,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->locale !== 'en_US') {
+            if ($this->locale !== 'fr_FR') {
                 return false;
             }
 
@@ -356,9 +364,9 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->locale = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->title = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->description = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->copyright = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->copyright = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->online = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -601,14 +609,14 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
         if ($this->isColumnModified(SeMediaFileI18nPeer::TITLE)) {
             $modifiedColumns[':p' . $index++]  = '`title`';
         }
-        if ($this->isColumnModified(SeMediaFileI18nPeer::NAME)) {
-            $modifiedColumns[':p' . $index++]  = '`name`';
-        }
         if ($this->isColumnModified(SeMediaFileI18nPeer::DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = '`description`';
         }
         if ($this->isColumnModified(SeMediaFileI18nPeer::COPYRIGHT)) {
             $modifiedColumns[':p' . $index++]  = '`copyright`';
+        }
+        if ($this->isColumnModified(SeMediaFileI18nPeer::ONLINE)) {
+            $modifiedColumns[':p' . $index++]  = '`online`';
         }
 
         $sql = sprintf(
@@ -630,14 +638,14 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
                     case '`title`':
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case '`name`':
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
-                        break;
                     case '`description`':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
                     case '`copyright`':
                         $stmt->bindValue($identifier, $this->copyright, PDO::PARAM_STR);
+                        break;
+                    case '`online`':
+                        $stmt->bindValue($identifier, (int) $this->online, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -788,13 +796,13 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
                 return $this->getTitle();
                 break;
             case 3:
-                return $this->getName();
-                break;
-            case 4:
                 return $this->getDescription();
                 break;
-            case 5:
+            case 4:
                 return $this->getCopyright();
+                break;
+            case 5:
+                return $this->getOnline();
                 break;
             default:
                 return null;
@@ -828,9 +836,9 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getLocale(),
             $keys[2] => $this->getTitle(),
-            $keys[3] => $this->getName(),
-            $keys[4] => $this->getDescription(),
-            $keys[5] => $this->getCopyright(),
+            $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getCopyright(),
+            $keys[5] => $this->getOnline(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -885,13 +893,13 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
                 $this->setTitle($value);
                 break;
             case 3:
-                $this->setName($value);
-                break;
-            case 4:
                 $this->setDescription($value);
                 break;
-            case 5:
+            case 4:
                 $this->setCopyright($value);
+                break;
+            case 5:
+                $this->setOnline($value);
                 break;
         } // switch()
     }
@@ -920,9 +928,9 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setLocale($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setTitle($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setDescription($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCopyright($arr[$keys[5]]);
+        if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCopyright($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setOnline($arr[$keys[5]]);
     }
 
     /**
@@ -937,9 +945,9 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
         if ($this->isColumnModified(SeMediaFileI18nPeer::ID)) $criteria->add(SeMediaFileI18nPeer::ID, $this->id);
         if ($this->isColumnModified(SeMediaFileI18nPeer::LOCALE)) $criteria->add(SeMediaFileI18nPeer::LOCALE, $this->locale);
         if ($this->isColumnModified(SeMediaFileI18nPeer::TITLE)) $criteria->add(SeMediaFileI18nPeer::TITLE, $this->title);
-        if ($this->isColumnModified(SeMediaFileI18nPeer::NAME)) $criteria->add(SeMediaFileI18nPeer::NAME, $this->name);
         if ($this->isColumnModified(SeMediaFileI18nPeer::DESCRIPTION)) $criteria->add(SeMediaFileI18nPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(SeMediaFileI18nPeer::COPYRIGHT)) $criteria->add(SeMediaFileI18nPeer::COPYRIGHT, $this->copyright);
+        if ($this->isColumnModified(SeMediaFileI18nPeer::ONLINE)) $criteria->add(SeMediaFileI18nPeer::ONLINE, $this->online);
 
         return $criteria;
     }
@@ -1013,9 +1021,9 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
         $copyObj->setId($this->getId());
         $copyObj->setLocale($this->getLocale());
         $copyObj->setTitle($this->getTitle());
-        $copyObj->setName($this->getName());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setCopyright($this->getCopyright());
+        $copyObj->setOnline($this->getOnline());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1133,9 +1141,9 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
         $this->id = null;
         $this->locale = null;
         $this->title = null;
-        $this->name = null;
         $this->description = null;
         $this->copyright = null;
+        $this->online = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

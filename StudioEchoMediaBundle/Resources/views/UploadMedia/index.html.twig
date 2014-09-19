@@ -1,9 +1,9 @@
 {% set mediaConfig = app.session.get('studio_echo_media_bundle/' ~ mediaParameterConfigKey) %}
-<div id="mediabundle">
-    <div id="displayzone" category="displayzone_{{ mediaConfig.category_id }}">
-        {{ render(controller('StudioEchoMediaBundle:UploadMedia:displayZone', { 'mediaObjectId': currentMediaObjectId, 'mediaParameterConfigKey': mediaParameterConfigKey })) }}
+<div id="mediabundle" class="row">
+    <div id="displayzone" category="displayzone_{{ mediaConfig.category_id }}" class="col-md-8">
+        {{ render(controller('StudioEchoMediaBundle:UploadMedia:displayZone', { 'mediaObjectId': currentMediaObjectId, 'culture': culture, 'mediaParameterConfigKey': mediaParameterConfigKey })) }}
     </div>
-    <div id="uploadzone">
+    <div id="uploadzone" class="col-md-4">
       <div id="fineuploader_{{ mediaConfig.category_id }}"></div>
       <div id="uploadzone-help">
         Nombre maximum de fichiers: {{ mediaConfig.max_files }}
@@ -13,7 +13,7 @@
         Taille maximum d'un fichier: {{ mediaConfig.max_size }} Mo
       </div>
     </div>
-    <div id="uploadzone_hide" style="display:none">
+    <div id="uploadzone_hide" style="display:none" class="col-md-4">
         Vous avez atteint le maximum de fichiers autorisés.
     </div>
 </div>
@@ -24,6 +24,7 @@
             endpoint: '{{ path('media_upload_file') }}',
             params: {
               mediaObjectId: {{ currentMediaObjectId }},
+              culture: '{{ culture }}',
               mediaParameterConfigKey: '{{ mediaParameterConfigKey }}'
             }
           },
@@ -61,7 +62,7 @@
             // console.log('responseJSON = ' + responseJSON);
             
             $.ajax({
-              url: '{{ path('media_display_zone', {'mediaObjectId': currentMediaObjectId, 'mediaParameterConfigKey': mediaParameterConfigKey }) }}',
+              url: '{{ path('media_display_zone', {'mediaObjectId': currentMediaObjectId, 'culture': culture, 'mediaParameterConfigKey': mediaParameterConfigKey }) }}',
               success: function(data) {
                 $("[category='displayzone_{{ mediaConfig.category_id }}']").html(data);
               }

@@ -45,6 +45,9 @@ abstract class BaseSeMediaFilePeer
     /** the column name for the category_id field */
     const CATEGORY_ID = 'se_media_file.category_id';
 
+    /** the column name for the name field */
+    const NAME = 'se_media_file.name';
+
     /** the column name for the extension field */
     const EXTENSION = 'se_media_file.extension';
 
@@ -62,9 +65,6 @@ abstract class BaseSeMediaFilePeer
 
     /** the column name for the width field */
     const WIDTH = 'se_media_file.width';
-
-    /** the column name for the online field */
-    const ONLINE = 'se_media_file.online';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'se_media_file.created_at';
@@ -90,7 +90,7 @@ abstract class BaseSeMediaFilePeer
      * The default locale to use for translations
      * @var        string
      */
-    const DEFAULT_LOCALE = 'en_US';
+    const DEFAULT_LOCALE = 'fr_FR';
     /**
      * holds an array of fieldnames
      *
@@ -98,11 +98,11 @@ abstract class BaseSeMediaFilePeer
      * e.g. SeMediaFilePeer::$fieldNames[SeMediaFilePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'CategoryId', 'Extension', 'Type', 'MimeType', 'Size', 'Height', 'Width', 'Online', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'categoryId', 'extension', 'type', 'mimeType', 'size', 'height', 'width', 'online', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (SeMediaFilePeer::ID, SeMediaFilePeer::CATEGORY_ID, SeMediaFilePeer::EXTENSION, SeMediaFilePeer::TYPE, SeMediaFilePeer::MIME_TYPE, SeMediaFilePeer::SIZE, SeMediaFilePeer::HEIGHT, SeMediaFilePeer::WIDTH, SeMediaFilePeer::ONLINE, SeMediaFilePeer::CREATED_AT, SeMediaFilePeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'CATEGORY_ID', 'EXTENSION', 'TYPE', 'MIME_TYPE', 'SIZE', 'HEIGHT', 'WIDTH', 'ONLINE', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'category_id', 'extension', 'type', 'mime_type', 'size', 'height', 'width', 'online', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'CategoryId', 'Name', 'Extension', 'Type', 'MimeType', 'Size', 'Height', 'Width', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'categoryId', 'name', 'extension', 'type', 'mimeType', 'size', 'height', 'width', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (SeMediaFilePeer::ID, SeMediaFilePeer::CATEGORY_ID, SeMediaFilePeer::NAME, SeMediaFilePeer::EXTENSION, SeMediaFilePeer::TYPE, SeMediaFilePeer::MIME_TYPE, SeMediaFilePeer::SIZE, SeMediaFilePeer::HEIGHT, SeMediaFilePeer::WIDTH, SeMediaFilePeer::CREATED_AT, SeMediaFilePeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'CATEGORY_ID', 'NAME', 'EXTENSION', 'TYPE', 'MIME_TYPE', 'SIZE', 'HEIGHT', 'WIDTH', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'category_id', 'name', 'extension', 'type', 'mime_type', 'size', 'height', 'width', 'created_at', 'updated_at', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
@@ -113,11 +113,11 @@ abstract class BaseSeMediaFilePeer
      * e.g. SeMediaFilePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CategoryId' => 1, 'Extension' => 2, 'Type' => 3, 'MimeType' => 4, 'Size' => 5, 'Height' => 6, 'Width' => 7, 'Online' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'categoryId' => 1, 'extension' => 2, 'type' => 3, 'mimeType' => 4, 'size' => 5, 'height' => 6, 'width' => 7, 'online' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
-        BasePeer::TYPE_COLNAME => array (SeMediaFilePeer::ID => 0, SeMediaFilePeer::CATEGORY_ID => 1, SeMediaFilePeer::EXTENSION => 2, SeMediaFilePeer::TYPE => 3, SeMediaFilePeer::MIME_TYPE => 4, SeMediaFilePeer::SIZE => 5, SeMediaFilePeer::HEIGHT => 6, SeMediaFilePeer::WIDTH => 7, SeMediaFilePeer::ONLINE => 8, SeMediaFilePeer::CREATED_AT => 9, SeMediaFilePeer::UPDATED_AT => 10, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'CATEGORY_ID' => 1, 'EXTENSION' => 2, 'TYPE' => 3, 'MIME_TYPE' => 4, 'SIZE' => 5, 'HEIGHT' => 6, 'WIDTH' => 7, 'ONLINE' => 8, 'CREATED_AT' => 9, 'UPDATED_AT' => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'category_id' => 1, 'extension' => 2, 'type' => 3, 'mime_type' => 4, 'size' => 5, 'height' => 6, 'width' => 7, 'online' => 8, 'created_at' => 9, 'updated_at' => 10, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CategoryId' => 1, 'Name' => 2, 'Extension' => 3, 'Type' => 4, 'MimeType' => 5, 'Size' => 6, 'Height' => 7, 'Width' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'categoryId' => 1, 'name' => 2, 'extension' => 3, 'type' => 4, 'mimeType' => 5, 'size' => 6, 'height' => 7, 'width' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
+        BasePeer::TYPE_COLNAME => array (SeMediaFilePeer::ID => 0, SeMediaFilePeer::CATEGORY_ID => 1, SeMediaFilePeer::NAME => 2, SeMediaFilePeer::EXTENSION => 3, SeMediaFilePeer::TYPE => 4, SeMediaFilePeer::MIME_TYPE => 5, SeMediaFilePeer::SIZE => 6, SeMediaFilePeer::HEIGHT => 7, SeMediaFilePeer::WIDTH => 8, SeMediaFilePeer::CREATED_AT => 9, SeMediaFilePeer::UPDATED_AT => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'CATEGORY_ID' => 1, 'NAME' => 2, 'EXTENSION' => 3, 'TYPE' => 4, 'MIME_TYPE' => 5, 'SIZE' => 6, 'HEIGHT' => 7, 'WIDTH' => 8, 'CREATED_AT' => 9, 'UPDATED_AT' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'category_id' => 1, 'name' => 2, 'extension' => 3, 'type' => 4, 'mime_type' => 5, 'size' => 6, 'height' => 7, 'width' => 8, 'created_at' => 9, 'updated_at' => 10, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
@@ -194,25 +194,25 @@ abstract class BaseSeMediaFilePeer
         if (null === $alias) {
             $criteria->addSelectColumn(SeMediaFilePeer::ID);
             $criteria->addSelectColumn(SeMediaFilePeer::CATEGORY_ID);
+            $criteria->addSelectColumn(SeMediaFilePeer::NAME);
             $criteria->addSelectColumn(SeMediaFilePeer::EXTENSION);
             $criteria->addSelectColumn(SeMediaFilePeer::TYPE);
             $criteria->addSelectColumn(SeMediaFilePeer::MIME_TYPE);
             $criteria->addSelectColumn(SeMediaFilePeer::SIZE);
             $criteria->addSelectColumn(SeMediaFilePeer::HEIGHT);
             $criteria->addSelectColumn(SeMediaFilePeer::WIDTH);
-            $criteria->addSelectColumn(SeMediaFilePeer::ONLINE);
             $criteria->addSelectColumn(SeMediaFilePeer::CREATED_AT);
             $criteria->addSelectColumn(SeMediaFilePeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.category_id');
+            $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.extension');
             $criteria->addSelectColumn($alias . '.type');
             $criteria->addSelectColumn($alias . '.mime_type');
             $criteria->addSelectColumn($alias . '.size');
             $criteria->addSelectColumn($alias . '.height');
             $criteria->addSelectColumn($alias . '.width');
-            $criteria->addSelectColumn($alias . '.online');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }

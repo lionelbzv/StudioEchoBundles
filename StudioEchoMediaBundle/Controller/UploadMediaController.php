@@ -13,7 +13,7 @@
  * - intégration i18n de tous les libellés, messages d'erreur, etc. / 0%
  * - écriture de tests unitaires / 0%
  *
- * - gestion injection de paramètres via config.yml : / 100%
+ * - gestion injection de paramètres via config.yml :
  *      - gestion des types de fichiers et/ou extensions autorisées / 50%
  *      - gestion des chemins / 0%
  *      - gestion des category / 0%
@@ -59,6 +59,7 @@ class UploadMediaController extends Controller {
     public function indexAction(
             $objectName, 
             $objectId, 
+            $culture, 
             $mediaParameterConfigKey
     ) {
         $logger = $this->get('logger');
@@ -66,6 +67,7 @@ class UploadMediaController extends Controller {
         $logger->info('indexAction');
         $logger->info('$objectName = '.print_r($objectName, true));
         $logger->info('$objectId = '.print_r($objectId, true));
+        $logger->info('$culture = '.print_r($culture, true));
         $logger->info('$mediaParameterConfigKey = '.print_r($mediaParameterConfigKey, true));
         
         // Get the current edit object
@@ -94,6 +96,7 @@ class UploadMediaController extends Controller {
         // Render the view
         return $this->render('StudioEchoMediaBundle:UploadMedia:index.html.twig', array(
                     'currentMediaObjectId' => $seMediaObject->getId(),
+                    'culture' => $culture,
                     'mediaParameterConfigKey' => $mediaParameterConfigKey
                 ));
     }
@@ -101,16 +104,21 @@ class UploadMediaController extends Controller {
     /**
      * 
      * @param type $mediaObjectId
+     * @param type $culture
+     * @param type $mediaParameterConfigKey
+     *
      * @return type
      */
     public function displayZoneAction(
             $mediaObjectId,
+            $culture,
             $mediaParameterConfigKey
     ) {
         $logger = $this->get('logger');
         $logger->info('UploadMediaController');
         $logger->info('displayZoneAction');
         $logger->info('$mediaObjectId = ' . print_r($mediaObjectId, true));
+        $logger->info('$culture = ' . print_r($culture, true));
         $logger->info('$mediaParameterConfigKey = ' . print_r($mediaParameterConfigKey, true));
 
         // Get the current edit object
@@ -125,14 +133,20 @@ class UploadMediaController extends Controller {
         
         // Get media files
         if ($seMediaObject) {
-            $mediaFiles = $seMediaObject->getSortedSeMediaFiles($mediaConfig['culture'], $mediaConfig['category_id']);
+            $mediaFiles = $seMediaObject->getSortedSeMediaFiles($mediaConfig['category_id']);
         } else {
             throw $this->createNotFoundException('SeMediaObject n°' . $mediaObjectId . ' not found.');
+        }
+        
+        // Force setting default locale
+        foreach ($mediaFiles as $mediaFile) {
+            $mediaFile->setLocale($culture);
         }
 
         // Render the view
         return $this->render('StudioEchoMediaBundle:UploadMedia:displayZone.html.twig', array(
                     'mediaObjectId' => $mediaObjectId,
+                    'culture' => $culture,
                     'mediaParameterConfigKey' => $mediaParameterConfigKey,
                     'mediaFiles' => $mediaFiles
                 ));
@@ -150,6 +164,8 @@ class UploadMediaController extends Controller {
 
         $mediaObjectId = $request->get('mediaObjectId');
         $logger->info('mediaObjectId = ' . $mediaObjectId);
+        $culture = $request->get('culture');
+        $logger->info('culture = ' . $culture);
         $mediaParameterConfigKey = $request->get('mediaParameterConfigKey');
         $logger->info('mediaParameterConfigKey = ' . $mediaParameterConfigKey);
 
@@ -164,7 +180,7 @@ class UploadMediaController extends Controller {
             
             // check if max files upload has not been reached
             $seMediaObject = SeMediaObjectQuery::create()->findPk($mediaObjectId);
-            $mediaFiles = $seMediaObject->getSortedSeMediaFiles($mediaConfig['culture'], $mediaConfig['category_id']);
+            $mediaFiles = $seMediaObject->getSortedSeMediaFiles($mediaConfig['category_id']);
             
             if (count($mediaFiles) >= $mediaConfig['max_files']) {
                 throw new \Exception('Nombre maximum de fichiers atteint.');
@@ -193,7 +209,7 @@ class UploadMediaController extends Controller {
 
                 $seMediaFile = new SeMediaFile();
 
-                $seMediaFile->setLocale($mediaConfig['culture']);
+                $seMediaFile->setLocale($culture);
                 $seMediaFile->setCategoryId($mediaConfig['category_id']);
                 $seMediaFile->setOnline(true);
                 $seMediaFile->setTitle($uploader->getOriginalName());
@@ -232,18 +248,17 @@ class UploadMediaController extends Controller {
     public function deleteAction(
         $mediaFileId
     ) {
-//      $logger = $this->get('logger');
-//      $logger->info('UploadMediaController');
-//      $logger->info('deleteAction');
-//      $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
+        $logger = $this->get('logger');
+        $logger->info('UploadMediaController');
+        $logger->info('deleteAction');
+        $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
 
         $session = $this->getRequest()->getSession();
         $mediaConfig = $session->get('studio_echo_media_bundle/'.$this->getRequest()->get('mediaParameterConfigKey'));
-//        $logger->info('$mediaConfig = '.print_r($mediaConfig, true));
         
         try {
             // Get the current edit object
-            $seMediaFile = SeMediaFileQuery::create()->joinWithI18n($mediaConfig['culture'])->findPk($mediaFileId);
+            $seMediaFile = SeMediaFileQuery::create()->findPk($mediaFileId);
 
             // Get file name
             $fileName = $seMediaFile->getName();
@@ -255,12 +270,9 @@ class UploadMediaController extends Controller {
             $path = $this->get('kernel')->getRootDir() . '/../web';
             $path .= '/uploads';
             unlink($path . DIRECTORY_SEPARATOR . $fileName);
-//        $logger->info('unlink ok');
 
             $jsonResponse = array('success' => true);
         } catch (\Exception $e) {
-//            $logger->info('Exception! Message = ' . print_r($e->getMessage(), true));
-
             $jsonResponse = array('error' => $e->getMessage());
         }
 
@@ -274,25 +286,26 @@ class UploadMediaController extends Controller {
      * @param type $mediaFileId
      */
     public function onlineAction(
-    	$mediaFileId
+    	$mediaFileId,
+        $culture
     ) {
-//      $logger = $this->get('logger');
-//      $logger->info('UploadMediaController');
-//      $logger->info('onlineAction');
-//      $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
+        $logger = $this->get('logger');
+        $logger->info('UploadMediaController');
+        $logger->info('onlineAction');
+        $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
+        $logger->info('$culture = '.print_r($culture, true));
 
         try {
-            // throw new \Exception('Une exception de test');
             // Get the current edit object
             $seMediaFile = SeMediaFileQuery::create()->findPk($mediaFileId);
 
-            // Set online/offline object
+            $seMediaFile->setLocale($culture);
             $seMediaFile->setOnline(!$seMediaFile->getOnline());
             $seMediaFile->save();
 
             $jsonResponse = array('success' => $seMediaFile->getOnline());
         } catch (\Exception $e) {
-//            $logger->info('Exception! Message = ' . print_r($e->getMessage(), true));
+            $logger->info('Exception! Message = ' . print_r($e->getMessage(), true));
 
             $jsonResponse = array('error' => $e->getMessage());
         }
@@ -307,19 +320,17 @@ class UploadMediaController extends Controller {
      * @param type $mediaFileId
      */
     public function editAction(
-        $mediaFileId
+        $mediaFileId,
+        $culture
     ) {
-//      $logger = $this->get('logger');
-//      $logger->info('UploadMediaController');
-//      $logger->info('editAction');
-//      $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
+        $logger = $this->get('logger');
+        $logger->info('UploadMediaController');
+        $logger->info('editAction');
+        $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
+        $logger->info('$culture = '.print_r($culture, true));
 
         $request = $this->getRequest();
         
-        $session = $this->getRequest()->getSession();
-        $mediaConfig = $session->get('studio_echo_media_bundle/'.$request->get('mediaParameterConfigKey'));
-//        $logger->info('$mediaConfig = '.print_r($mediaConfig, true));
-
         try {
             // Get the current edit object
             $seMediaFile = SeMediaFileQuery::create()->findPk($mediaFileId);
@@ -332,7 +343,7 @@ class UploadMediaController extends Controller {
             $copyright = $request->get('copyright');
             //      $logger->info('copyright = '.$copyright);
 
-            $seMediaFile->setLocale($mediaConfig['culture']);
+            $seMediaFile->setLocale($culture);
             $seMediaFile->setTitle($title);
             $seMediaFile->setDescription($description);
             $seMediaFile->setCopyright($copyright);
@@ -358,9 +369,9 @@ class UploadMediaController extends Controller {
     ) {
         $request = $this->getRequest();
 
-      $logger = $this->get('logger');
-      $logger->info('UploadMediaController');
-      $logger->info('sortAction');
+        $logger = $this->get('logger');
+        $logger->info('UploadMediaController');
+        $logger->info('sortAction');
 
         try {
             // gestion transaction
@@ -369,9 +380,9 @@ class UploadMediaController extends Controller {
 
             // Set sortable ranks
             $sorted_ids = $request->get('sort');
-        $logger->info('sorted_ids = '.print_r($sorted_ids, true));
+            $logger->info('sorted_ids = '.print_r($sorted_ids, true));
             $objectMediaId = $request->get('objectMediaId');
-        $logger->info('objectMediaId = '.$objectMediaId);
+            $logger->info('objectMediaId = '.$objectMediaId);
             // Update sortable ranks
             // transaction
             $i = 1;

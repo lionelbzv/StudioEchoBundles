@@ -17,9 +17,9 @@ class SeMediaObject extends BaseSeMediaObject
    * 
    * @return collection of StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile
    */
-  public function getSortedSeMediaFiles($locale = 'fr', $category_id = 1) {
+  public function getSortedSeMediaFiles($category_id = 1) {
     return SeMediaFileQuery::create()
-            ->joinWithI18n($locale)
+            // ->joinWithI18n($locale, \Criteria::INNER_JOIN)
             ->filterByCategoryId($category_id)
             ->useSeObjectHasFileQuery()
                 ->filterBySeMediaObjectId($this->getId())

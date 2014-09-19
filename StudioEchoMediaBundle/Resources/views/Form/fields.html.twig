@@ -1,0 +1,5 @@
+{% block studio_echo_media_widget %}
+    {% spaceless %}
+        {{ render(controller('StudioEchoMediaBundle:UploadMedia:index', { 'objectName' : object_name, 'objectId' : object_id, 'mediaParameterConfigKey' : media_key, 'culture' : culture })) }}
+    {% endspaceless %}
+{% endblock %}

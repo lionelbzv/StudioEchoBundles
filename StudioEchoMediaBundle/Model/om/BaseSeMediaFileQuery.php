@@ -22,25 +22,25 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFile;
 /**
  * @method SeMediaFileQuery orderById($order = Criteria::ASC) Order by the id column
  * @method SeMediaFileQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
+ * @method SeMediaFileQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method SeMediaFileQuery orderByExtension($order = Criteria::ASC) Order by the extension column
  * @method SeMediaFileQuery orderByType($order = Criteria::ASC) Order by the type column
  * @method SeMediaFileQuery orderByMimeType($order = Criteria::ASC) Order by the mime_type column
  * @method SeMediaFileQuery orderBySize($order = Criteria::ASC) Order by the size column
  * @method SeMediaFileQuery orderByHeight($order = Criteria::ASC) Order by the height column
  * @method SeMediaFileQuery orderByWidth($order = Criteria::ASC) Order by the width column
- * @method SeMediaFileQuery orderByOnline($order = Criteria::ASC) Order by the online column
  * @method SeMediaFileQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method SeMediaFileQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method SeMediaFileQuery groupById() Group by the id column
  * @method SeMediaFileQuery groupByCategoryId() Group by the category_id column
+ * @method SeMediaFileQuery groupByName() Group by the name column
  * @method SeMediaFileQuery groupByExtension() Group by the extension column
  * @method SeMediaFileQuery groupByType() Group by the type column
  * @method SeMediaFileQuery groupByMimeType() Group by the mime_type column
  * @method SeMediaFileQuery groupBySize() Group by the size column
  * @method SeMediaFileQuery groupByHeight() Group by the height column
  * @method SeMediaFileQuery groupByWidth() Group by the width column
- * @method SeMediaFileQuery groupByOnline() Group by the online column
  * @method SeMediaFileQuery groupByCreatedAt() Group by the created_at column
  * @method SeMediaFileQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -60,25 +60,25 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFile;
  * @method SeMediaFile findOneOrCreate(PropelPDO $con = null) Return the first SeMediaFile matching the query, or a new SeMediaFile object populated from the query conditions when no match is found
  *
  * @method SeMediaFile findOneByCategoryId(int $category_id) Return the first SeMediaFile filtered by the category_id column
+ * @method SeMediaFile findOneByName(string $name) Return the first SeMediaFile filtered by the name column
  * @method SeMediaFile findOneByExtension(string $extension) Return the first SeMediaFile filtered by the extension column
  * @method SeMediaFile findOneByType(string $type) Return the first SeMediaFile filtered by the type column
  * @method SeMediaFile findOneByMimeType(string $mime_type) Return the first SeMediaFile filtered by the mime_type column
  * @method SeMediaFile findOneBySize(int $size) Return the first SeMediaFile filtered by the size column
  * @method SeMediaFile findOneByHeight(int $height) Return the first SeMediaFile filtered by the height column
  * @method SeMediaFile findOneByWidth(int $width) Return the first SeMediaFile filtered by the width column
- * @method SeMediaFile findOneByOnline(boolean $online) Return the first SeMediaFile filtered by the online column
  * @method SeMediaFile findOneByCreatedAt(string $created_at) Return the first SeMediaFile filtered by the created_at column
  * @method SeMediaFile findOneByUpdatedAt(string $updated_at) Return the first SeMediaFile filtered by the updated_at column
  *
  * @method array findById(int $id) Return SeMediaFile objects filtered by the id column
  * @method array findByCategoryId(int $category_id) Return SeMediaFile objects filtered by the category_id column
+ * @method array findByName(string $name) Return SeMediaFile objects filtered by the name column
  * @method array findByExtension(string $extension) Return SeMediaFile objects filtered by the extension column
  * @method array findByType(string $type) Return SeMediaFile objects filtered by the type column
  * @method array findByMimeType(string $mime_type) Return SeMediaFile objects filtered by the mime_type column
  * @method array findBySize(int $size) Return SeMediaFile objects filtered by the size column
  * @method array findByHeight(int $height) Return SeMediaFile objects filtered by the height column
  * @method array findByWidth(int $width) Return SeMediaFile objects filtered by the width column
- * @method array findByOnline(boolean $online) Return SeMediaFile objects filtered by the online column
  * @method array findByCreatedAt(string $created_at) Return SeMediaFile objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return SeMediaFile objects filtered by the updated_at column
  */
@@ -186,7 +186,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `category_id`, `extension`, `type`, `mime_type`, `size`, `height`, `width`, `online`, `created_at`, `updated_at` FROM `se_media_file` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `category_id`, `name`, `extension`, `type`, `mime_type`, `size`, `height`, `width`, `created_at`, `updated_at` FROM `se_media_file` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -357,6 +357,35 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SeMediaFilePeer::CATEGORY_ID, $categoryId, $comparison);
+    }
+
+    /**
+     * Filter the query on the name column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
+     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $name The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByName($name = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($name)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $name)) {
+                $name = str_replace('*', '%', $name);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(SeMediaFilePeer::NAME, $name, $comparison);
     }
 
     /**
@@ -570,33 +599,6 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SeMediaFilePeer::WIDTH, $width, $comparison);
-    }
-
-    /**
-     * Filter the query on the online column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByOnline(true); // WHERE online = true
-     * $query->filterByOnline('yes'); // WHERE online = true
-     * </code>
-     *
-     * @param     boolean|string $online The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return SeMediaFileQuery The current query, for fluid interface
-     */
-    public function filterByOnline($online = null, $comparison = null)
-    {
-        if (is_string($online)) {
-            $online = in_array(strtolower($online), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(SeMediaFilePeer::ONLINE, $online, $comparison);
     }
 
     /**
@@ -877,7 +879,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *
      * @return    SeMediaFileQuery The current query, for fluid interface
      */
-    public function joinI18n($locale = 'en_US', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinI18n($locale = 'fr_FR', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $relationName = $relationAlias ? $relationAlias : 'SeMediaFileI18n';
 
@@ -895,7 +897,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *
      * @return    SeMediaFileQuery The current query, for fluid interface
      */
-    public function joinWithI18n($locale = 'en_US', $joinType = Criteria::LEFT_JOIN)
+    public function joinWithI18n($locale = 'fr_FR', $joinType = Criteria::LEFT_JOIN)
     {
         $this
             ->joinI18n($locale, null, $joinType)
@@ -916,7 +918,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *
      * @return    SeMediaFileI18nQuery A secondary query class using the current class as primary query
      */
-    public function useI18nQuery($locale = 'en_US', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useI18nQuery($locale = 'fr_FR', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinI18n($locale, $relationAlias, $joinType)

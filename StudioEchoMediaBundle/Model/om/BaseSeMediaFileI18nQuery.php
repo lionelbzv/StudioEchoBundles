@@ -21,16 +21,16 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery;
  * @method SeMediaFileI18nQuery orderById($order = Criteria::ASC) Order by the id column
  * @method SeMediaFileI18nQuery orderByLocale($order = Criteria::ASC) Order by the locale column
  * @method SeMediaFileI18nQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method SeMediaFileI18nQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method SeMediaFileI18nQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method SeMediaFileI18nQuery orderByCopyright($order = Criteria::ASC) Order by the copyright column
+ * @method SeMediaFileI18nQuery orderByOnline($order = Criteria::ASC) Order by the online column
  *
  * @method SeMediaFileI18nQuery groupById() Group by the id column
  * @method SeMediaFileI18nQuery groupByLocale() Group by the locale column
  * @method SeMediaFileI18nQuery groupByTitle() Group by the title column
- * @method SeMediaFileI18nQuery groupByName() Group by the name column
  * @method SeMediaFileI18nQuery groupByDescription() Group by the description column
  * @method SeMediaFileI18nQuery groupByCopyright() Group by the copyright column
+ * @method SeMediaFileI18nQuery groupByOnline() Group by the online column
  *
  * @method SeMediaFileI18nQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method SeMediaFileI18nQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -46,16 +46,16 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18nQuery;
  * @method SeMediaFileI18n findOneById(int $id) Return the first SeMediaFileI18n filtered by the id column
  * @method SeMediaFileI18n findOneByLocale(string $locale) Return the first SeMediaFileI18n filtered by the locale column
  * @method SeMediaFileI18n findOneByTitle(string $title) Return the first SeMediaFileI18n filtered by the title column
- * @method SeMediaFileI18n findOneByName(string $name) Return the first SeMediaFileI18n filtered by the name column
  * @method SeMediaFileI18n findOneByDescription(string $description) Return the first SeMediaFileI18n filtered by the description column
  * @method SeMediaFileI18n findOneByCopyright(string $copyright) Return the first SeMediaFileI18n filtered by the copyright column
+ * @method SeMediaFileI18n findOneByOnline(boolean $online) Return the first SeMediaFileI18n filtered by the online column
  *
  * @method array findById(int $id) Return SeMediaFileI18n objects filtered by the id column
  * @method array findByLocale(string $locale) Return SeMediaFileI18n objects filtered by the locale column
  * @method array findByTitle(string $title) Return SeMediaFileI18n objects filtered by the title column
- * @method array findByName(string $name) Return SeMediaFileI18n objects filtered by the name column
  * @method array findByDescription(string $description) Return SeMediaFileI18n objects filtered by the description column
  * @method array findByCopyright(string $copyright) Return SeMediaFileI18n objects filtered by the copyright column
+ * @method array findByOnline(boolean $online) Return SeMediaFileI18n objects filtered by the online column
  */
 abstract class BaseSeMediaFileI18nQuery extends ModelCriteria
 {
@@ -148,7 +148,7 @@ abstract class BaseSeMediaFileI18nQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `locale`, `title`, `name`, `description`, `copyright` FROM `se_media_file_i18n` WHERE `id` = :p0 AND `locale` = :p1';
+        $sql = 'SELECT `id`, `locale`, `title`, `description`, `copyright`, `online` FROM `se_media_file_i18n` WHERE `id` = :p0 AND `locale` = :p1';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
@@ -352,35 +352,6 @@ abstract class BaseSeMediaFileI18nQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the name column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
-     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $name The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return SeMediaFileI18nQuery The current query, for fluid interface
-     */
-    public function filterByName($name = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($name)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $name)) {
-                $name = str_replace('*', '%', $name);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(SeMediaFileI18nPeer::NAME, $name, $comparison);
-    }
-
-    /**
      * Filter the query on the description column
      *
      * Example usage:
@@ -436,6 +407,33 @@ abstract class BaseSeMediaFileI18nQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SeMediaFileI18nPeer::COPYRIGHT, $copyright, $comparison);
+    }
+
+    /**
+     * Filter the query on the online column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOnline(true); // WHERE online = true
+     * $query->filterByOnline('yes'); // WHERE online = true
+     * </code>
+     *
+     * @param     boolean|string $online The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return SeMediaFileI18nQuery The current query, for fluid interface
+     */
+    public function filterByOnline($online = null, $comparison = null)
+    {
+        if (is_string($online)) {
+            $online = in_array(strtolower($online), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(SeMediaFileI18nPeer::ONLINE, $online, $comparison);
     }
 
     /**

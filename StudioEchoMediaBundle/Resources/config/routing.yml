@@ -4,8 +4,8 @@ media_homepage:
 
 # Upload / Display routes
 media_display_zone:
-    pattern:  /display/{mediaObjectId}/key/{mediaParameterConfigKey}
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:displayZone }
+    pattern:  /display/{mediaObjectId}/key/{mediaParameterConfigKey}/{culture}
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:displayZone, culture: 'fr_FR' }
 
 # JSON routes
 media_upload_file:
@@ -19,13 +19,13 @@ media_delete_file:
     requirements: { _format: (xml|json), _method: GET }
 
 media_online_file:
-    pattern: /online-file/{mediaFileId}/online.{_format}
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:online, _format: json }
+    pattern: /online-file/{mediaFileId}//{culture}/online.{_format}
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:online, _format: json, culture: 'fr_FR' }
     requirements: { _format: (xml|json), _method: GET }
 
 media_edit_file:
-    pattern: /edit-file/{mediaFileId}/edit.{_format}
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:edit, _format: json }
+    pattern: /edit-file/{mediaFileId}/{culture}/edit.{_format}
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:edit, _format: json, culture: 'fr_FR' }
     requirements: { _format: (xml|json), _method: POST }
 
 media_sort:
