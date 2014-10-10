@@ -9,7 +9,7 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileQuery;
  * 
  * @author Lionel Bouzonville / Studio Echo
  */
-class StudioEchoBundlesMediaManager {
+class StudioEchoMediaManager {
     /**
      * Retourne 1 fichier média associé à l'objet identifié en paramètre.
      * 
@@ -32,7 +32,6 @@ class StudioEchoBundlesMediaManager {
                     ->_else()
                         ->orderBySortableRank()
                     ->_endif()
-                    
                 ->endUse()
                 ->filterByOnline(true)
                 ->filterByCategoryId($categoryId)
@@ -57,7 +56,7 @@ class StudioEchoBundlesMediaManager {
                     ->endUse()
                     ->orderBySortableRank()
                 ->endUse()
-                ->filterByOnline(true)
+                ->filterByOnline($locale)
                 ->filterByCategoryId($categoryId)
                 ->find();
     }

@@ -5,7 +5,7 @@ namespace StudioEchoBundles\Lib;
  *
  * @author Studio Echo / Lionel Bouzonville
  */
-class StudioEchoBundlesUtils {
+class StudioEchoUtils {
 
 	/**
 	 *	Transforme les lettres avec accents vers la lettre sans accents.
