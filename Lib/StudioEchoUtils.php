@@ -364,4 +364,29 @@ class StudioEchoUtils {
 	}
 
 
+    /**
+     * 	Implode récursif pour sortie une chaine à partir d'un tableau multi-dimensionnel
+     *	http://stackoverflow.com/questions/3899971/implode-and-explode-multi-dimensional-arrays
+     *
+     *  @array 		Le tableau n-dimension
+     *  @glue 		La chaine de lien
+     *
+     *  @string
+     */
+    public static function multiImplode($array, $glue) {
+        $ret = '';
+
+        foreach ($array as $item) {
+            if (is_array($item)) {
+                $ret .= StudioEchoUtils::multiImplode($item, $glue) . $glue;
+            } else {
+                $ret .= $item . $glue;
+            }
+        }
+
+        $ret = substr($ret, 0, 0-strlen($glue));
+
+        return $ret;
+    }
+
 }
