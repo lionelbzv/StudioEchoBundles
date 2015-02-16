@@ -61,8 +61,26 @@ class SeMediaFileTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('ActivityDocLib', 'MontcalmAventure\\Model\\ActivityDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ActivityDocLibs');
+        $this->addRelation('ActivitySubDocLib', 'MontcalmAventure\\Model\\ActivitySubDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ActivitySubDocLibs');
+        $this->addRelation('ActivityInsertDocLib', 'MontcalmAventure\\Model\\ActivityInsertDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ActivityInsertDocLibs');
+        $this->addRelation('ContentProfileDocLib', 'MontcalmAventure\\Model\\ContentProfileDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ContentProfileDocLibs');
+        $this->addRelation('ContentWishDocLib', 'MontcalmAventure\\Model\\ContentWishDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ContentWishDocLibs');
+        $this->addRelation('ContentNewsDocLib', 'MontcalmAventure\\Model\\ContentNewsDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ContentNewsDocLibs');
+        $this->addRelation('ContentGenericDocLib', 'MontcalmAventure\\Model\\ContentGenericDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ContentGenericDocLibs');
+        $this->addRelation('ContentOfferDocLib', 'MontcalmAventure\\Model\\ContentOfferDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ContentOfferDocLibs');
+        $this->addRelation('ContentStayDocLib', 'MontcalmAventure\\Model\\ContentStayDocLib', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'ContentStayDocLibs');
         $this->addRelation('SeObjectHasFile', 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeObjectHasFile', RelationMap::ONE_TO_MANY, array('id' => 'se_media_file_id', ), 'CASCADE', 'CASCADE', 'SeObjectHasFiles');
         $this->addRelation('SeMediaFileI18n', 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaFileI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'SeMediaFileI18ns');
+        $this->addRelation('Activity', 'MontcalmAventure\\Model\\Activity', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'Activities');
+        $this->addRelation('ActivitySub', 'MontcalmAventure\\Model\\ActivitySub', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ActivitySubs');
+        $this->addRelation('ActivityInsert', 'MontcalmAventure\\Model\\ActivityInsert', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ActivityInserts');
+        $this->addRelation('ContentProfile', 'MontcalmAventure\\Model\\ContentProfile', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ContentProfiles');
+        $this->addRelation('ContentWish', 'MontcalmAventure\\Model\\ContentWish', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ContentWishes');
+        $this->addRelation('ContentNews', 'MontcalmAventure\\Model\\ContentNews', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ContentNewss');
+        $this->addRelation('ContentGeneric', 'MontcalmAventure\\Model\\ContentGeneric', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ContentGenerics');
+        $this->addRelation('ContentOffer', 'MontcalmAventure\\Model\\ContentOffer', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ContentOffers');
+        $this->addRelation('ContentStay', 'MontcalmAventure\\Model\\ContentStay', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'ContentStays');
         $this->addRelation('SeMediaObject', 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaObject', RelationMap::MANY_TO_MANY, array(), 'CASCADE', 'CASCADE', 'SeMediaObjects');
     } // buildRelations()
 
@@ -88,6 +106,10 @@ class SeMediaFileTableMap extends TableMap
   'create_column' => 'created_at',
   'update_column' => 'updated_at',
   'disable_updated_at' => 'false',
+),
+            'event' =>  array (
+),
+            'extend' =>  array (
 ),
         );
     } // getBehaviors()

@@ -19,6 +19,9 @@
 </div>
 <script>
       $(document).ready(function () {
+
+        $('#mediabundle').parent().attr('class', 'container-media-bundle');
+
         $('#fineuploader_{{ mediaConfig.category_id }}').fineUploader({
           request: {
             endpoint: '{{ path('media_upload_file') }}',

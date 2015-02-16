@@ -59,16 +59,16 @@ class UploadMediaController extends Controller {
     public function indexAction(
             $objectName, 
             $objectId, 
-            $culture, 
-            $mediaParameterConfigKey
+            $mediaParameterConfigKey,
+            $culture = 'fr_FR'
     ) {
         $logger = $this->get('logger');
         $logger->info('UploadMediaController');
         $logger->info('indexAction');
         $logger->info('$objectName = '.print_r($objectName, true));
         $logger->info('$objectId = '.print_r($objectId, true));
-        $logger->info('$culture = '.print_r($culture, true));
         $logger->info('$mediaParameterConfigKey = '.print_r($mediaParameterConfigKey, true));
+        $logger->info('$culture = '.print_r($culture, true));
         
         // Get the current edit object
         $seMediaObject = SeMediaObjectQuery::create()->filterByObjectClassname($objectName)->filterByObjectId($objectId)->findOne();

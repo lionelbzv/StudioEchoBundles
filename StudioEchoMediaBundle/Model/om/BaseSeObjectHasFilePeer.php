@@ -9,6 +9,9 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
+use Glorpen\Propel\PropelBundle\Events\DetectOMClassEvent;
+use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFilePeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFile;
@@ -29,7 +32,7 @@ abstract class BaseSeObjectHasFilePeer
     const OM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeObjectHasFile';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\map\\SeObjectHasFileTableMap';
+    const TM_CLASS = 'SeObjectHasFileTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 5;
@@ -59,7 +62,7 @@ abstract class BaseSeObjectHasFilePeer
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of SeObjectHasFile objects.
+     * An identiy map to hold any loaded instances of SeObjectHasFile objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
      * @var        array SeObjectHasFile[]
@@ -243,7 +246,7 @@ abstract class BaseSeObjectHasFilePeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return SeObjectHasFile
+     * @return                 SeObjectHasFile
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -310,7 +313,7 @@ abstract class BaseSeObjectHasFilePeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param SeObjectHasFile $obj A SeObjectHasFile object.
+     * @param      SeObjectHasFile $obj A SeObjectHasFile object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -360,7 +363,7 @@ abstract class BaseSeObjectHasFilePeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return SeObjectHasFile Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return   SeObjectHasFile Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -381,8 +384,10 @@ abstract class BaseSeObjectHasFilePeer
      */
     public static function clearInstancePool($and_clear_all_references = false)
     {
-      if ($and_clear_all_references) {
-        foreach (SeObjectHasFilePeer::$instances as $instance) {
+      if ($and_clear_all_references)
+      {
+        foreach (SeObjectHasFilePeer::$instances as $instance)
+        {
           $instance->clearAllReferences(true);
         }
       }
@@ -482,7 +487,7 @@ abstract class BaseSeObjectHasFilePeer
             // $obj->hydrate($row, $startcol, true); // rehydrate
             $col = $startcol + SeObjectHasFilePeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = SeObjectHasFilePeer::OM_CLASS;
+            $cls = SeObjectHasFilePeer::getOMClass($row, $startcol);
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
             SeObjectHasFilePeer::addInstanceToPool($obj, $key);
@@ -1141,7 +1146,7 @@ abstract class BaseSeObjectHasFilePeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeObjectHasFilePeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeObjectHasFilePeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoMediaBundle\Model\map\SeObjectHasFileTableMap());
+        $dbMap->addTableObject(new SeObjectHasFileTableMap());
       }
     }
 
@@ -1153,6 +1158,13 @@ abstract class BaseSeObjectHasFilePeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
+
+        $event = new DetectOMClassEvent(SeObjectHasFilePeer::OM_CLASS, $row, $colnum);
+        EventDispatcherProxy::trigger('om.detect', $event);
+        if($event->isDetected()){
+            return $event->getDetectedClass();
+        }
+
         return SeObjectHasFilePeer::OM_CLASS;
     }
 
@@ -1187,7 +1199,7 @@ abstract class BaseSeObjectHasFilePeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1268,7 +1280,7 @@ abstract class BaseSeObjectHasFilePeer
             $con->commit();
 
             return $affectedRows;
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1335,7 +1347,7 @@ abstract class BaseSeObjectHasFilePeer
             $con->commit();
 
             return $affectedRows;
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollBack();
             throw $e;
         }
@@ -1348,7 +1360,7 @@ abstract class BaseSeObjectHasFilePeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param SeObjectHasFile $obj The object to validate.
+     * @param      SeObjectHasFile $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1383,7 +1395,7 @@ abstract class BaseSeObjectHasFilePeer
      * @param   int $se_media_object_id
      * @param   int $se_media_file_id
      * @param      PropelPDO $con
-     * @return SeObjectHasFile
+     * @return   SeObjectHasFile
      */
     public static function retrieveByPK($se_media_object_id, $se_media_file_id, PropelPDO $con = null) {
         $_instancePoolKey = serialize(array((string) $se_media_object_id, (string) $se_media_file_id));
@@ -1419,7 +1431,7 @@ abstract class BaseSeObjectHasFilePeer
         // shift the objects with a position lower than the one of object
         $c = new Criteria();
         $c->addSelectColumn('MAX(' . SeObjectHasFilePeer::RANK_COL . ')');
-        SeObjectHasFilePeer::sortableApplyScopeCriteria($c, $scope);
+        $c->add(SeObjectHasFilePeer::SCOPE_COL, $scope, Criteria::EQUAL);
         $stmt = SeObjectHasFilePeer::doSelectStmt($c, $con);
 
         return $stmt->fetchColumn();
@@ -1442,7 +1454,7 @@ abstract class BaseSeObjectHasFilePeer
 
         $c = new Criteria;
         $c->add(SeObjectHasFilePeer::RANK_COL, $rank);
-        SeObjectHasFilePeer::sortableApplyScopeCriteria($c, $scope);
+        $c->add(SeObjectHasFilePeer::SCOPE_COL, $scope, Criteria::EQUAL);
 
         return SeObjectHasFilePeer::doSelectOne($c, $con);
     }
@@ -1477,7 +1489,7 @@ abstract class BaseSeObjectHasFilePeer
             $con->commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollback();
             throw $e;
         }
@@ -1518,7 +1530,7 @@ abstract class BaseSeObjectHasFilePeer
     /**
      * Return an array of sortable objects in the given scope ordered by position
      *
-     * @param     mixed     $scope  the scope of the list
+     * @param     int       $scope  the scope of the list
      * @param     string    $order  sorting order, to be chosen between Criteria::ASC (default) and Criteria::DESC
      * @param     PropelPDO $con    optional connection
      *
@@ -1527,7 +1539,7 @@ abstract class BaseSeObjectHasFilePeer
     public static function retrieveList($scope, $order = Criteria::ASC, PropelPDO $con = null)
     {
         $c = new Criteria();
-        SeObjectHasFilePeer::sortableApplyScopeCriteria($c, $scope);
+        $c->add(SeObjectHasFilePeer::SCOPE_COL, $scope);
 
         return SeObjectHasFilePeer::doSelectOrderByRank($c, $order, $con);
     }
@@ -1535,7 +1547,7 @@ abstract class BaseSeObjectHasFilePeer
     /**
      * Return the number of sortable objects in the given scope
      *
-     * @param     mixed     $scope  the scope of the list
+     * @param     int       $scope  the scope of the list
      * @param     PropelPDO $con    optional connection
      *
      * @return    array list of sortable objects
@@ -1543,7 +1555,7 @@ abstract class BaseSeObjectHasFilePeer
     public static function countList($scope, PropelPDO $con = null)
     {
         $c = new Criteria();
-        SeObjectHasFilePeer::sortableApplyScopeCriteria($c, $scope);
+        $c->add(SeObjectHasFilePeer::SCOPE_COL, $scope);
 
         return SeObjectHasFilePeer::doCount($c, $con);
     }
@@ -1551,7 +1563,7 @@ abstract class BaseSeObjectHasFilePeer
     /**
      * Deletes the sortable objects in the given scope
      *
-     * @param     mixed     $scope  the scope of the list
+     * @param     int       $scope  the scope of the list
      * @param     PropelPDO $con    optional connection
      *
      * @return    int number of deleted objects
@@ -1559,24 +1571,9 @@ abstract class BaseSeObjectHasFilePeer
     public static function deleteList($scope, PropelPDO $con = null)
     {
         $c = new Criteria();
-        SeObjectHasFilePeer::sortableApplyScopeCriteria($c, $scope);
+        $c->add(SeObjectHasFilePeer::SCOPE_COL, $scope);
 
         return SeObjectHasFilePeer::doDelete($c, $con);
-    }
-
-    /**
-     * Applies all scope fields to the given criteria.
-     *
-     * @param  Criteria $criteria Applies the values directly to this criteria.
-     * @param  mixed    $scope    The scope value as scalar type or array($value1, ...).
-     * @param  string   $method   The method we use to apply the values.
-     *
-     */
-    public static function sortableApplyScopeCriteria(Criteria $criteria, $scope, $method = 'add')
-    {
-
-        $criteria->$method(SeObjectHasFilePeer::SE_MEDIA_OBJECT_ID, $scope, Criteria::EQUAL);
-
     }
 
     /**
@@ -1586,7 +1583,7 @@ abstract class BaseSeObjectHasFilePeer
      * @param      int $delta Value to be shifted by, can be negative
      * @param      int $first First node to be shifted
      * @param      int $last  Last node to be shifted
-     * @param      mixed $scope Scope to use for the shift. Scalar value (single scope) or array
+     * @param      int $scope Scope to use for the shift
      * @param      PropelPDO $con Connection to use.
      */
     public static function shiftRank($delta, $first = null, $last = null, $scope = null, PropelPDO $con = null)
@@ -1602,7 +1599,7 @@ abstract class BaseSeObjectHasFilePeer
         if (null !== $last) {
             $whereCriteria->addAnd(SeObjectHasFilePeer::RANK_COL, $last, Criteria::LESS_EQUAL);
         }
-        SeObjectHasFilePeer::sortableApplyScopeCriteria($whereCriteria, $scope);
+        $whereCriteria->add(SeObjectHasFilePeer::SCOPE_COL, $scope, Criteria::EQUAL);
 
         $valuesCriteria = new Criteria(SeObjectHasFilePeer::DATABASE_NAME);
         $valuesCriteria->add(SeObjectHasFilePeer::RANK_COL, array('raw' => SeObjectHasFilePeer::RANK_COL . ' + ?', 'value' => $delta), Criteria::CUSTOM_EQUAL);
@@ -1617,3 +1614,4 @@ abstract class BaseSeObjectHasFilePeer
 //
 BaseSeObjectHasFilePeer::buildTableMap();
 
+EventDispatcherProxy::trigger(array('construct','peer.construct'), new PeerEvent('StudioEchoBundles\StudioEchoMediaBundle\Model\om\BaseSeObjectHasFilePeer'));

@@ -5,7 +5,7 @@ namespace StudioEchoBundles\StudioEchoMediaBundle\Twig\Extension;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 
-use StudioEchoBundles\StudioEchoMediaBundle\Lib\StudioEchoBundlesMediaManager;
+use StudioEchoBundles\StudioEchoMediaBundle\Lib\StudioEchoMediaManager;
 
 class MediaExtension extends \Twig_Extension
 {
@@ -30,7 +30,7 @@ class MediaExtension extends \Twig_Extension
      */
     public function seMediaGetName($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1, $rank = null)
     {
-        $seMediaFile = StudioEchoBundlesMediaManager::getMedia($objectId, $objectClassname, $locale, $categoryId, $rank);
+        $seMediaFile = StudioEchoMediaManager::getMedia($objectId, $objectClassname, $locale, $categoryId, $rank);
         
         if ($seMediaFile) {
             return $seMediaFile->getName();
@@ -44,7 +44,7 @@ class MediaExtension extends \Twig_Extension
      */
     public function seMediaGetList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1)
     {
-        $seMediaList = StudioEchoBundlesMediaManager::getMediaList($objectId, $objectClassname, $locale, $categoryId);
+        $seMediaList = StudioEchoMediaManager::getMediaList($objectId, $objectClassname, $locale, $categoryId);
         
         return $seMediaList;
     }
@@ -54,7 +54,7 @@ class MediaExtension extends \Twig_Extension
      */
     public function seMediaGetFileNames($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1)
     {
-        $seMediaList = StudioEchoBundlesMediaManager::getMediaList($objectId, $objectClassname, $locale, $categoryId);
+        $seMediaList = StudioEchoMediaManager::getMediaList($objectId, $objectClassname, $locale, $categoryId);
 
         $fileNames = array();
         foreach($seMediaList as $media) {

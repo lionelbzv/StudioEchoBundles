@@ -1,6 +1,6 @@
 media_homepage:
     pattern:  /
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:index }
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:index, culture: 'fr_FR' }
 
 # Upload / Display routes
 media_display_zone:

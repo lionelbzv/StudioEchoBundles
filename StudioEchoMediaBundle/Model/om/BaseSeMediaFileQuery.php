@@ -12,6 +12,26 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
+use Glorpen\Propel\PropelBundle\Events\QueryEvent;
+use MontcalmAventure\Model\Activity;
+use MontcalmAventure\Model\ActivityDocLib;
+use MontcalmAventure\Model\ActivityInsert;
+use MontcalmAventure\Model\ActivityInsertDocLib;
+use MontcalmAventure\Model\ActivitySub;
+use MontcalmAventure\Model\ActivitySubDocLib;
+use MontcalmAventure\Model\ContentGeneric;
+use MontcalmAventure\Model\ContentGenericDocLib;
+use MontcalmAventure\Model\ContentNews;
+use MontcalmAventure\Model\ContentNewsDocLib;
+use MontcalmAventure\Model\ContentOffer;
+use MontcalmAventure\Model\ContentOfferDocLib;
+use MontcalmAventure\Model\ContentProfile;
+use MontcalmAventure\Model\ContentProfileDocLib;
+use MontcalmAventure\Model\ContentStay;
+use MontcalmAventure\Model\ContentStayDocLib;
+use MontcalmAventure\Model\ContentWish;
+use MontcalmAventure\Model\ContentWishDocLib;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18n;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFilePeer;
@@ -47,6 +67,42 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFile;
  * @method SeMediaFileQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method SeMediaFileQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method SeMediaFileQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method SeMediaFileQuery leftJoinActivityDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityDocLib relation
+ * @method SeMediaFileQuery rightJoinActivityDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityDocLib relation
+ * @method SeMediaFileQuery innerJoinActivityDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinActivitySubDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivitySubDocLib relation
+ * @method SeMediaFileQuery rightJoinActivitySubDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivitySubDocLib relation
+ * @method SeMediaFileQuery innerJoinActivitySubDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivitySubDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinActivityInsertDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ActivityInsertDocLib relation
+ * @method SeMediaFileQuery rightJoinActivityInsertDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ActivityInsertDocLib relation
+ * @method SeMediaFileQuery innerJoinActivityInsertDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ActivityInsertDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinContentProfileDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContentProfileDocLib relation
+ * @method SeMediaFileQuery rightJoinContentProfileDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContentProfileDocLib relation
+ * @method SeMediaFileQuery innerJoinContentProfileDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ContentProfileDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinContentWishDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContentWishDocLib relation
+ * @method SeMediaFileQuery rightJoinContentWishDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContentWishDocLib relation
+ * @method SeMediaFileQuery innerJoinContentWishDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ContentWishDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinContentNewsDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContentNewsDocLib relation
+ * @method SeMediaFileQuery rightJoinContentNewsDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContentNewsDocLib relation
+ * @method SeMediaFileQuery innerJoinContentNewsDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ContentNewsDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinContentGenericDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContentGenericDocLib relation
+ * @method SeMediaFileQuery rightJoinContentGenericDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContentGenericDocLib relation
+ * @method SeMediaFileQuery innerJoinContentGenericDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ContentGenericDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinContentOfferDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContentOfferDocLib relation
+ * @method SeMediaFileQuery rightJoinContentOfferDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContentOfferDocLib relation
+ * @method SeMediaFileQuery innerJoinContentOfferDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ContentOfferDocLib relation
+ *
+ * @method SeMediaFileQuery leftJoinContentStayDocLib($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContentStayDocLib relation
+ * @method SeMediaFileQuery rightJoinContentStayDocLib($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContentStayDocLib relation
+ * @method SeMediaFileQuery innerJoinContentStayDocLib($relationAlias = null) Adds a INNER JOIN clause to the query using the ContentStayDocLib relation
  *
  * @method SeMediaFileQuery leftJoinSeObjectHasFile($relationAlias = null) Adds a LEFT JOIN clause to the query using the SeObjectHasFile relation
  * @method SeMediaFileQuery rightJoinSeObjectHasFile($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SeObjectHasFile relation
@@ -91,15 +147,10 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaFile', $modelAlias = null)
     {
-        if (null === $dbName) {
-            $dbName = 'default';
-        }
-        if (null === $modelName) {
-            $modelName = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaFile';
-        }
         parent::__construct($dbName, $modelName, $modelAlias);
+        EventDispatcherProxy::trigger(array('construct','query.construct'), new QueryEvent($this));
     }
 
     /**
@@ -115,8 +166,10 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
         if ($criteria instanceof SeMediaFileQuery) {
             return $criteria;
         }
-        $query = new SeMediaFileQuery(null, null, $modelAlias);
-
+        $query = new static();
+        if (null !== $modelAlias) {
+            $query->setModelAlias($modelAlias);
+        }
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -144,7 +197,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = SeMediaFilePeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
-            // the object is already in the instance pool
+            // the object is alredy in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -197,7 +250,8 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $obj = new SeMediaFile();
+            $cls = SeMediaFilePeer::getOMClass();
+            $obj = new $cls;
             $obj->hydrate($row);
             SeMediaFilePeer::addInstanceToPool($obj, (string) $key);
         }
@@ -608,7 +662,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -651,7 +705,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -685,6 +739,672 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SeMediaFilePeer::UPDATED_AT, $updatedAt, $comparison);
+    }
+
+    /**
+     * Filter the query by a related ActivityDocLib object
+     *
+     * @param   ActivityDocLib|PropelObjectCollection $activityDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByActivityDocLib($activityDocLib, $comparison = null)
+    {
+        if ($activityDocLib instanceof ActivityDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $activityDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($activityDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useActivityDocLibQuery()
+                ->filterByPrimaryKeys($activityDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByActivityDocLib() only accepts arguments of type ActivityDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ActivityDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinActivityDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ActivityDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ActivityDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ActivityDocLib relation ActivityDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ActivityDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useActivityDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinActivityDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ActivityDocLib', '\MontcalmAventure\Model\ActivityDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ActivitySubDocLib object
+     *
+     * @param   ActivitySubDocLib|PropelObjectCollection $activitySubDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByActivitySubDocLib($activitySubDocLib, $comparison = null)
+    {
+        if ($activitySubDocLib instanceof ActivitySubDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $activitySubDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($activitySubDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useActivitySubDocLibQuery()
+                ->filterByPrimaryKeys($activitySubDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByActivitySubDocLib() only accepts arguments of type ActivitySubDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ActivitySubDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinActivitySubDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ActivitySubDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ActivitySubDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ActivitySubDocLib relation ActivitySubDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ActivitySubDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useActivitySubDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinActivitySubDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ActivitySubDocLib', '\MontcalmAventure\Model\ActivitySubDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ActivityInsertDocLib object
+     *
+     * @param   ActivityInsertDocLib|PropelObjectCollection $activityInsertDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByActivityInsertDocLib($activityInsertDocLib, $comparison = null)
+    {
+        if ($activityInsertDocLib instanceof ActivityInsertDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $activityInsertDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($activityInsertDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useActivityInsertDocLibQuery()
+                ->filterByPrimaryKeys($activityInsertDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByActivityInsertDocLib() only accepts arguments of type ActivityInsertDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ActivityInsertDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinActivityInsertDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ActivityInsertDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ActivityInsertDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ActivityInsertDocLib relation ActivityInsertDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ActivityInsertDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useActivityInsertDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinActivityInsertDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ActivityInsertDocLib', '\MontcalmAventure\Model\ActivityInsertDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ContentProfileDocLib object
+     *
+     * @param   ContentProfileDocLib|PropelObjectCollection $contentProfileDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContentProfileDocLib($contentProfileDocLib, $comparison = null)
+    {
+        if ($contentProfileDocLib instanceof ContentProfileDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $contentProfileDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($contentProfileDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useContentProfileDocLibQuery()
+                ->filterByPrimaryKeys($contentProfileDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContentProfileDocLib() only accepts arguments of type ContentProfileDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContentProfileDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinContentProfileDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContentProfileDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContentProfileDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContentProfileDocLib relation ContentProfileDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ContentProfileDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useContentProfileDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContentProfileDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContentProfileDocLib', '\MontcalmAventure\Model\ContentProfileDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ContentWishDocLib object
+     *
+     * @param   ContentWishDocLib|PropelObjectCollection $contentWishDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContentWishDocLib($contentWishDocLib, $comparison = null)
+    {
+        if ($contentWishDocLib instanceof ContentWishDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $contentWishDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($contentWishDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useContentWishDocLibQuery()
+                ->filterByPrimaryKeys($contentWishDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContentWishDocLib() only accepts arguments of type ContentWishDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContentWishDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinContentWishDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContentWishDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContentWishDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContentWishDocLib relation ContentWishDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ContentWishDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useContentWishDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContentWishDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContentWishDocLib', '\MontcalmAventure\Model\ContentWishDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ContentNewsDocLib object
+     *
+     * @param   ContentNewsDocLib|PropelObjectCollection $contentNewsDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContentNewsDocLib($contentNewsDocLib, $comparison = null)
+    {
+        if ($contentNewsDocLib instanceof ContentNewsDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $contentNewsDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($contentNewsDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useContentNewsDocLibQuery()
+                ->filterByPrimaryKeys($contentNewsDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContentNewsDocLib() only accepts arguments of type ContentNewsDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContentNewsDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinContentNewsDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContentNewsDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContentNewsDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContentNewsDocLib relation ContentNewsDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ContentNewsDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useContentNewsDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContentNewsDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContentNewsDocLib', '\MontcalmAventure\Model\ContentNewsDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ContentGenericDocLib object
+     *
+     * @param   ContentGenericDocLib|PropelObjectCollection $contentGenericDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContentGenericDocLib($contentGenericDocLib, $comparison = null)
+    {
+        if ($contentGenericDocLib instanceof ContentGenericDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $contentGenericDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($contentGenericDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useContentGenericDocLibQuery()
+                ->filterByPrimaryKeys($contentGenericDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContentGenericDocLib() only accepts arguments of type ContentGenericDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContentGenericDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinContentGenericDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContentGenericDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContentGenericDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContentGenericDocLib relation ContentGenericDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ContentGenericDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useContentGenericDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContentGenericDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContentGenericDocLib', '\MontcalmAventure\Model\ContentGenericDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ContentOfferDocLib object
+     *
+     * @param   ContentOfferDocLib|PropelObjectCollection $contentOfferDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContentOfferDocLib($contentOfferDocLib, $comparison = null)
+    {
+        if ($contentOfferDocLib instanceof ContentOfferDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $contentOfferDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($contentOfferDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useContentOfferDocLibQuery()
+                ->filterByPrimaryKeys($contentOfferDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContentOfferDocLib() only accepts arguments of type ContentOfferDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContentOfferDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinContentOfferDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContentOfferDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContentOfferDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContentOfferDocLib relation ContentOfferDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ContentOfferDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useContentOfferDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContentOfferDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContentOfferDocLib', '\MontcalmAventure\Model\ContentOfferDocLibQuery');
+    }
+
+    /**
+     * Filter the query by a related ContentStayDocLib object
+     *
+     * @param   ContentStayDocLib|PropelObjectCollection $contentStayDocLib  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SeMediaFileQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContentStayDocLib($contentStayDocLib, $comparison = null)
+    {
+        if ($contentStayDocLib instanceof ContentStayDocLib) {
+            return $this
+                ->addUsingAlias(SeMediaFilePeer::ID, $contentStayDocLib->getSeMediaFileId(), $comparison);
+        } elseif ($contentStayDocLib instanceof PropelObjectCollection) {
+            return $this
+                ->useContentStayDocLibQuery()
+                ->filterByPrimaryKeys($contentStayDocLib->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContentStayDocLib() only accepts arguments of type ContentStayDocLib or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContentStayDocLib relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SeMediaFileQuery The current query, for fluid interface
+     */
+    public function joinContentStayDocLib($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContentStayDocLib');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContentStayDocLib');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContentStayDocLib relation ContentStayDocLib object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \MontcalmAventure\Model\ContentStayDocLibQuery A secondary query class using the current class as primary query
+     */
+    public function useContentStayDocLibQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContentStayDocLib($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContentStayDocLib', '\MontcalmAventure\Model\ContentStayDocLibQuery');
     }
 
     /**
@@ -836,6 +1556,159 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Activity object
+     * using the activity_doc_lib table as cross reference
+     *
+     * @param   Activity $activity the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByActivity($activity, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useActivityDocLibQuery()
+            ->filterByActivity($activity, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ActivitySub object
+     * using the activity_sub_doc_lib table as cross reference
+     *
+     * @param   ActivitySub $activitySub the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByActivitySub($activitySub, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useActivitySubDocLibQuery()
+            ->filterByActivitySub($activitySub, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ActivityInsert object
+     * using the activity_insert_doc_lib table as cross reference
+     *
+     * @param   ActivityInsert $activityInsert the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByActivityInsert($activityInsert, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useActivityInsertDocLibQuery()
+            ->filterByActivityInsert($activityInsert, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ContentProfile object
+     * using the content_profile_doc_lib table as cross reference
+     *
+     * @param   ContentProfile $contentProfile the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByContentProfile($contentProfile, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useContentProfileDocLibQuery()
+            ->filterByContentProfile($contentProfile, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ContentWish object
+     * using the content_wish_doc_lib table as cross reference
+     *
+     * @param   ContentWish $contentWish the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByContentWish($contentWish, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useContentWishDocLibQuery()
+            ->filterByContentWish($contentWish, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ContentNews object
+     * using the content_news_doc_lib table as cross reference
+     *
+     * @param   ContentNews $contentNews the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByContentNews($contentNews, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useContentNewsDocLibQuery()
+            ->filterByContentNews($contentNews, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ContentGeneric object
+     * using the content_generic_doc_lib table as cross reference
+     *
+     * @param   ContentGeneric $contentGeneric the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByContentGeneric($contentGeneric, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useContentGenericDocLibQuery()
+            ->filterByContentGeneric($contentGeneric, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ContentOffer object
+     * using the content_offer_doc_lib table as cross reference
+     *
+     * @param   ContentOffer $contentOffer the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByContentOffer($contentOffer, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useContentOfferDocLibQuery()
+            ->filterByContentOffer($contentOffer, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related ContentStay object
+     * using the content_stay_doc_lib table as cross reference
+     *
+     * @param   ContentStay $contentStay the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   SeMediaFileQuery The current query, for fluid interface
+     */
+    public function filterByContentStay($contentStay, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useContentStayDocLibQuery()
+            ->filterByContentStay($contentStay, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Filter the query by a related SeMediaObject object
      * using the se_object_has_file table as cross reference
      *
@@ -866,6 +1739,76 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
         }
 
         return $this;
+    }
+
+    /**
+     * Code to execute before every SELECT statement
+     *
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePreSelect(PropelPDO $con)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger('query.select.pre', new QueryEvent($this));
+
+        return $this->preSelect($con);
+    }
+
+    /**
+     * Code to execute before every DELETE statement
+     *
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePreDelete(PropelPDO $con)
+    {
+        EventDispatcherProxy::trigger(array('delete.pre','query.delete.pre'), new QueryEvent($this));
+        // event behavior
+        // placeholder, issue #5
+
+        return $this->preDelete($con);
+    }
+
+    /**
+     * Code to execute after every DELETE statement
+     *
+     * @param     int $affectedRows the number of deleted rows
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePostDelete($affectedRows, PropelPDO $con)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger(array('delete.post','query.delete.post'), new QueryEvent($this));
+
+        return $this->postDelete($affectedRows, $con);
+    }
+
+    /**
+     * Code to execute before every UPDATE statement
+     *
+     * @param     array $values The associatiove array of columns and values for the update
+     * @param     PropelPDO $con The connection object used by the query
+     * @param     boolean $forceIndividualSaves If false (default), the resulting call is a BasePeer::doUpdate(), ortherwise it is a series of save() calls on all the found objects
+     */
+    protected function basePreUpdate(&$values, PropelPDO $con, $forceIndividualSaves = false)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger(array('update.pre', 'query.update.pre'), new QueryEvent($this));
+
+        return $this->preUpdate($values, $con, $forceIndividualSaves);
+    }
+
+    /**
+     * Code to execute after every UPDATE statement
+     *
+     * @param     int $affectedRows the number of udated rows
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePostUpdate($affectedRows, PropelPDO $con)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new QueryEvent($this));
+
+        return $this->postUpdate($affectedRows, $con);
     }
 
     // i18n behavior
@@ -989,5 +1932,14 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
     public function firstCreatedFirst()
     {
         return $this->addAscendingOrderByColumn(SeMediaFilePeer::CREATED_AT);
+    }
+    // extend behavior
+    public function setFormatter($formatter)
+    {
+        if (is_string($formatter) && $formatter === \ModelCriteria::FORMAT_ON_DEMAND) {
+            $formatter = '\Glorpen\Propel\PropelBundle\Formatter\PropelOnDemandFormatter';
+        }
+
+        return parent::setFormatter($formatter);
     }
 }

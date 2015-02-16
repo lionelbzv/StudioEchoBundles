@@ -12,6 +12,8 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
+use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObject;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
@@ -62,15 +64,10 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaObject', $modelAlias = null)
     {
-        if (null === $dbName) {
-            $dbName = 'default';
-        }
-        if (null === $modelName) {
-            $modelName = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaObject';
-        }
         parent::__construct($dbName, $modelName, $modelAlias);
+        EventDispatcherProxy::trigger(array('construct','query.construct'), new QueryEvent($this));
     }
 
     /**
@@ -86,8 +83,10 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
         if ($criteria instanceof SeMediaObjectQuery) {
             return $criteria;
         }
-        $query = new SeMediaObjectQuery(null, null, $modelAlias);
-
+        $query = new static();
+        if (null !== $modelAlias) {
+            $query->setModelAlias($modelAlias);
+        }
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -115,7 +114,7 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = SeMediaObjectPeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
-            // the object is already in the instance pool
+            // the object is alredy in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -168,7 +167,8 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $obj = new SeMediaObject();
+            $cls = SeMediaObjectPeer::getOMClass();
+            $obj = new $cls;
             $obj->hydrate($row);
             SeMediaObjectPeer::addInstanceToPool($obj, (string) $key);
         }
@@ -366,7 +366,7 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -409,7 +409,7 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -552,6 +552,76 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
         return $this;
     }
 
+    /**
+     * Code to execute before every SELECT statement
+     *
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePreSelect(PropelPDO $con)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger('query.select.pre', new QueryEvent($this));
+
+        return $this->preSelect($con);
+    }
+
+    /**
+     * Code to execute before every DELETE statement
+     *
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePreDelete(PropelPDO $con)
+    {
+        EventDispatcherProxy::trigger(array('delete.pre','query.delete.pre'), new QueryEvent($this));
+        // event behavior
+        // placeholder, issue #5
+
+        return $this->preDelete($con);
+    }
+
+    /**
+     * Code to execute after every DELETE statement
+     *
+     * @param     int $affectedRows the number of deleted rows
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePostDelete($affectedRows, PropelPDO $con)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger(array('delete.post','query.delete.post'), new QueryEvent($this));
+
+        return $this->postDelete($affectedRows, $con);
+    }
+
+    /**
+     * Code to execute before every UPDATE statement
+     *
+     * @param     array $values The associatiove array of columns and values for the update
+     * @param     PropelPDO $con The connection object used by the query
+     * @param     boolean $forceIndividualSaves If false (default), the resulting call is a BasePeer::doUpdate(), ortherwise it is a series of save() calls on all the found objects
+     */
+    protected function basePreUpdate(&$values, PropelPDO $con, $forceIndividualSaves = false)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger(array('update.pre', 'query.update.pre'), new QueryEvent($this));
+
+        return $this->preUpdate($values, $con, $forceIndividualSaves);
+    }
+
+    /**
+     * Code to execute after every UPDATE statement
+     *
+     * @param     int $affectedRows the number of udated rows
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePostUpdate($affectedRows, PropelPDO $con)
+    {
+        // event behavior
+        EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new QueryEvent($this));
+
+        return $this->postUpdate($affectedRows, $con);
+    }
+
     // timestampable behavior
 
     /**
@@ -616,5 +686,14 @@ abstract class BaseSeMediaObjectQuery extends ModelCriteria
     public function firstCreatedFirst()
     {
         return $this->addAscendingOrderByColumn(SeMediaObjectPeer::CREATED_AT);
+    }
+    // extend behavior
+    public function setFormatter($formatter)
+    {
+        if (is_string($formatter) && $formatter === \ModelCriteria::FORMAT_ON_DEMAND) {
+            $formatter = '\Glorpen\Propel\PropelBundle\Formatter\PropelOnDemandFormatter';
+        }
+
+        return parent::setFormatter($formatter);
     }
 }

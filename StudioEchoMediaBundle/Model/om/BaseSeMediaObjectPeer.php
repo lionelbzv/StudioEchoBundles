@@ -9,6 +9,9 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
+use Glorpen\Propel\PropelBundle\Events\DetectOMClassEvent;
+use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObject;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFilePeer;
@@ -27,7 +30,7 @@ abstract class BaseSeMediaObjectPeer
     const OM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaObject';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\map\\SeMediaObjectTableMap';
+    const TM_CLASS = 'SeMediaObjectTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 5;
@@ -57,7 +60,7 @@ abstract class BaseSeMediaObjectPeer
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of SeMediaObject objects.
+     * An identiy map to hold any loaded instances of SeMediaObject objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
      * @var        array SeMediaObject[]
@@ -229,7 +232,7 @@ abstract class BaseSeMediaObjectPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return SeMediaObject
+     * @return                 SeMediaObject
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -296,7 +299,7 @@ abstract class BaseSeMediaObjectPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param SeMediaObject $obj A SeMediaObject object.
+     * @param      SeMediaObject $obj A SeMediaObject object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -346,7 +349,7 @@ abstract class BaseSeMediaObjectPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return SeMediaObject Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return   SeMediaObject Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -367,8 +370,10 @@ abstract class BaseSeMediaObjectPeer
      */
     public static function clearInstancePool($and_clear_all_references = false)
     {
-      if ($and_clear_all_references) {
-        foreach (SeMediaObjectPeer::$instances as $instance) {
+      if ($and_clear_all_references)
+      {
+        foreach (SeMediaObjectPeer::$instances as $instance)
+        {
           $instance->clearAllReferences(true);
         }
       }
@@ -471,7 +476,7 @@ abstract class BaseSeMediaObjectPeer
             // $obj->hydrate($row, $startcol, true); // rehydrate
             $col = $startcol + SeMediaObjectPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = SeMediaObjectPeer::OM_CLASS;
+            $cls = SeMediaObjectPeer::getOMClass($row, $startcol);
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
             SeMediaObjectPeer::addInstanceToPool($obj, $key);
@@ -499,7 +504,7 @@ abstract class BaseSeMediaObjectPeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeMediaObjectPeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeMediaObjectPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoMediaBundle\Model\map\SeMediaObjectTableMap());
+        $dbMap->addTableObject(new SeMediaObjectTableMap());
       }
     }
 
@@ -511,6 +516,13 @@ abstract class BaseSeMediaObjectPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
+
+        $event = new DetectOMClassEvent(SeMediaObjectPeer::OM_CLASS, $row, $colnum);
+        EventDispatcherProxy::trigger('om.detect', $event);
+        if($event->isDetected()){
+            return $event->getDetectedClass();
+        }
+
         return SeMediaObjectPeer::OM_CLASS;
     }
 
@@ -549,7 +561,7 @@ abstract class BaseSeMediaObjectPeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollBack();
             throw $e;
         }
@@ -622,7 +634,7 @@ abstract class BaseSeMediaObjectPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollBack();
             throw $e;
         }
@@ -681,7 +693,7 @@ abstract class BaseSeMediaObjectPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (Exception $e) {
+        } catch (PropelException $e) {
             $con->rollBack();
             throw $e;
         }
@@ -694,7 +706,7 @@ abstract class BaseSeMediaObjectPeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param SeMediaObject $obj The object to validate.
+     * @param      SeMediaObject $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -727,7 +739,7 @@ abstract class BaseSeMediaObjectPeer
     /**
      * Retrieve a single object by pkey.
      *
-     * @param int $pk the primary key.
+     * @param      int $pk the primary key.
      * @param      PropelPDO $con the connection to use
      * @return SeMediaObject
      */
@@ -783,3 +795,4 @@ abstract class BaseSeMediaObjectPeer
 //
 BaseSeMediaObjectPeer::buildTableMap();
 
+EventDispatcherProxy::trigger(array('construct','peer.construct'), new PeerEvent('StudioEchoBundles\StudioEchoMediaBundle\Model\om\BaseSeMediaObjectPeer'));
