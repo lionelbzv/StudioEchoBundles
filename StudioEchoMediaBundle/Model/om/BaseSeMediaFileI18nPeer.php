@@ -9,9 +9,6 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-use Glorpen\Propel\PropelBundle\Events\DetectOMClassEvent;
-use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18n;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18nPeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFilePeer;
@@ -30,7 +27,7 @@ abstract class BaseSeMediaFileI18nPeer
     const OM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaFileI18n';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'SeMediaFileI18nTableMap';
+    const TM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\map\\SeMediaFileI18nTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 6;
@@ -63,7 +60,7 @@ abstract class BaseSeMediaFileI18nPeer
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identiy map to hold any loaded instances of SeMediaFileI18n objects.
+     * An identity map to hold any loaded instances of SeMediaFileI18n objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
      * @var        array SeMediaFileI18n[]
@@ -237,7 +234,7 @@ abstract class BaseSeMediaFileI18nPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return                 SeMediaFileI18n
+     * @return SeMediaFileI18n
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -304,7 +301,7 @@ abstract class BaseSeMediaFileI18nPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param      SeMediaFileI18n $obj A SeMediaFileI18n object.
+     * @param SeMediaFileI18n $obj A SeMediaFileI18n object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -354,7 +351,7 @@ abstract class BaseSeMediaFileI18nPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   SeMediaFileI18n Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return SeMediaFileI18n Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -375,10 +372,8 @@ abstract class BaseSeMediaFileI18nPeer
      */
     public static function clearInstancePool($and_clear_all_references = false)
     {
-      if ($and_clear_all_references)
-      {
-        foreach (SeMediaFileI18nPeer::$instances as $instance)
-        {
+      if ($and_clear_all_references) {
+        foreach (SeMediaFileI18nPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
@@ -478,7 +473,7 @@ abstract class BaseSeMediaFileI18nPeer
             // $obj->hydrate($row, $startcol, true); // rehydrate
             $col = $startcol + SeMediaFileI18nPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = SeMediaFileI18nPeer::getOMClass($row, $startcol);
+            $cls = SeMediaFileI18nPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
             SeMediaFileI18nPeer::addInstanceToPool($obj, $key);
@@ -744,7 +739,7 @@ abstract class BaseSeMediaFileI18nPeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeMediaFileI18nPeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeMediaFileI18nPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new SeMediaFileI18nTableMap());
+        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoMediaBundle\Model\map\SeMediaFileI18nTableMap());
       }
     }
 
@@ -756,13 +751,6 @@ abstract class BaseSeMediaFileI18nPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-
-        $event = new DetectOMClassEvent(SeMediaFileI18nPeer::OM_CLASS, $row, $colnum);
-        EventDispatcherProxy::trigger('om.detect', $event);
-        if($event->isDetected()){
-            return $event->getDetectedClass();
-        }
-
         return SeMediaFileI18nPeer::OM_CLASS;
     }
 
@@ -797,7 +785,7 @@ abstract class BaseSeMediaFileI18nPeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -878,7 +866,7 @@ abstract class BaseSeMediaFileI18nPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -945,7 +933,7 @@ abstract class BaseSeMediaFileI18nPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -958,7 +946,7 @@ abstract class BaseSeMediaFileI18nPeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param      SeMediaFileI18n $obj The object to validate.
+     * @param SeMediaFileI18n $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -993,7 +981,7 @@ abstract class BaseSeMediaFileI18nPeer
      * @param   int $id
      * @param   string $locale
      * @param      PropelPDO $con
-     * @return   SeMediaFileI18n
+     * @return SeMediaFileI18n
      */
     public static function retrieveByPK($id, $locale, PropelPDO $con = null) {
         $_instancePoolKey = serialize(array((string) $id, (string) $locale));
@@ -1017,4 +1005,3 @@ abstract class BaseSeMediaFileI18nPeer
 //
 BaseSeMediaFileI18nPeer::buildTableMap();
 
-EventDispatcherProxy::trigger(array('construct','peer.construct'), new PeerEvent('StudioEchoBundles\StudioEchoMediaBundle\Model\om\BaseSeMediaFileI18nPeer'));

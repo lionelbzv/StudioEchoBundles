@@ -1,0 +1,3 @@
+studio_echo_order_payment_atos_autoresponse:
+    pattern:  /autoresponse-atos
+    defaults: { _controller: StudioEchoSipsAtosBundle:AutoResponseListener:index }

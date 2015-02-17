@@ -15,8 +15,6 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileQuery;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObject;
@@ -41,7 +39,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -126,12 +124,8 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
      */
     public function getId()
     {
-        return $this->id;
-    }
 
-    public function __construct(){
-        parent::__construct();
-        EventDispatcherProxy::trigger(array('construct','model.construct'), new ModelEvent($this));
+        return $this->id;
     }
 
     /**
@@ -141,6 +135,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
      */
     public function getObjectId()
     {
+
         return $this->object_id;
     }
 
@@ -151,6 +146,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
      */
     public function getObjectClassname()
     {
+
         return $this->object_classname;
     }
 
@@ -237,7 +233,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SeMediaObject The current object (for fluent API support)
      */
     public function setId($v)
@@ -258,7 +254,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     /**
      * Set the value of [object_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SeMediaObject The current object (for fluent API support)
      */
     public function setObjectId($v)
@@ -279,12 +275,12 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     /**
      * Set the value of [object_classname] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SeMediaObject The current object (for fluent API support)
      */
     public function setObjectClassname($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -366,7 +362,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -388,6 +384,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 5; // 5 = SeMediaObjectPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -478,15 +475,12 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
 
         $con->beginTransaction();
         try {
-            EventDispatcherProxy::trigger(array('delete.pre','model.delete.pre'), new ModelEvent($this));
             $deleteQuery = SeMediaObjectQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
-                // event behavior
-                EventDispatcherProxy::trigger(array('delete.post', 'model.delete.post'), new ModelEvent($this));
                 $con->commit();
                 $this->setDeleted(true);
             } else {
@@ -526,8 +520,6 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
         $isInsert = $this->isNew();
         try {
             $ret = $this->preSave($con);
-            // event behavior
-            EventDispatcherProxy::trigger('model.save.pre', new ModelEvent($this));
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
@@ -537,31 +529,21 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
                 if (!$this->isColumnModified(SeMediaObjectPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
-                // event behavior
-                EventDispatcherProxy::trigger('model.insert.pre', new ModelEvent($this));
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(SeMediaObjectPeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
-                // event behavior
-                EventDispatcherProxy::trigger(array('update.pre', 'model.update.pre'), new ModelEvent($this));
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
                 if ($isInsert) {
                     $this->postInsert($con);
-                    // event behavior
-                    EventDispatcherProxy::trigger('model.insert.post', new ModelEvent($this));
                 } else {
                     $this->postUpdate($con);
-                    // event behavior
-                    EventDispatcherProxy::trigger(array('update.post', 'model.update.post'), new ModelEvent($this));
                 }
                 $this->postSave($con);
-                // event behavior
-                EventDispatcherProxy::trigger('model.save.post', new ModelEvent($this));
                 SeMediaObjectPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -793,10 +775,10 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -905,6 +887,11 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
             $keys[3] => $this->getCreatedAt(),
             $keys[4] => $this->getUpdatedAt(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->collSeObjectHasFiles) {
                 $result['SeObjectHasFiles'] = $this->collSeObjectHasFiles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1227,7 +1214,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
                     if (false !== $this->collSeObjectHasFilesPartial && count($collSeObjectHasFiles)) {
                       $this->initSeObjectHasFiles(false);
 
-                      foreach($collSeObjectHasFiles as $obj) {
+                      foreach ($collSeObjectHasFiles as $obj) {
                         if (false == $this->collSeObjectHasFiles->contains($obj)) {
                           $this->collSeObjectHasFiles->append($obj);
                         }
@@ -1237,12 +1224,13 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
                     }
 
                     $collSeObjectHasFiles->getInternalIterator()->rewind();
+
                     return $collSeObjectHasFiles;
                 }
 
-                if($partial && $this->collSeObjectHasFiles) {
-                    foreach($this->collSeObjectHasFiles as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collSeObjectHasFiles) {
+                    foreach ($this->collSeObjectHasFiles as $obj) {
+                        if ($obj->isNew()) {
                             $collSeObjectHasFiles[] = $obj;
                         }
                     }
@@ -1270,7 +1258,11 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     {
         $seObjectHasFilesToDelete = $this->getSeObjectHasFiles(new Criteria(), $con)->diff($seObjectHasFiles);
 
-        $this->seObjectHasFilesScheduledForDeletion = unserialize(serialize($seObjectHasFilesToDelete));
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->seObjectHasFilesScheduledForDeletion = clone $seObjectHasFilesToDelete;
 
         foreach ($seObjectHasFilesToDelete as $seObjectHasFileRemoved) {
             $seObjectHasFileRemoved->setSeMediaObject(null);
@@ -1304,7 +1296,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getSeObjectHasFiles());
             }
             $query = SeObjectHasFileQuery::create(null, $criteria);
@@ -1333,8 +1325,13 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
             $this->initSeObjectHasFiles();
             $this->collSeObjectHasFilesPartial = true;
         }
+
         if (!in_array($l, $this->collSeObjectHasFiles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddSeObjectHasFile($l);
+
+            if ($this->seObjectHasFilesScheduledForDeletion and $this->seObjectHasFilesScheduledForDeletion->contains($l)) {
+                $this->seObjectHasFilesScheduledForDeletion->remove($this->seObjectHasFilesScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -1473,7 +1470,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     public function setSeMediaFiles(PropelCollection $seMediaFiles, PropelPDO $con = null)
     {
         $this->clearSeMediaFiles();
-        $currentSeMediaFiles = $this->getSeMediaFiles();
+        $currentSeMediaFiles = $this->getSeMediaFiles(null, $con);
 
         $this->seMediaFilesScheduledForDeletion = $currentSeMediaFiles->diff($seMediaFiles);
 
@@ -1530,10 +1527,14 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
         if ($this->collSeMediaFiles === null) {
             $this->initSeMediaFiles();
         }
+
         if (!$this->collSeMediaFiles->contains($seMediaFile)) { // only add it if the **same** object is not already associated
             $this->doAddSeMediaFile($seMediaFile);
+            $this->collSeMediaFiles[] = $seMediaFile;
 
-            $this->collSeMediaFiles[]= $seMediaFile;
+            if ($this->seMediaFilesScheduledForDeletion and $this->seMediaFilesScheduledForDeletion->contains($seMediaFile)) {
+                $this->seMediaFilesScheduledForDeletion->remove($this->seMediaFilesScheduledForDeletion->search($seMediaFile));
+            }
         }
 
         return $this;
@@ -1542,11 +1543,17 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
     /**
      * @param	SeMediaFile $seMediaFile The seMediaFile object to add.
      */
-    protected function doAddSeMediaFile($seMediaFile)
+    protected function doAddSeMediaFile(SeMediaFile $seMediaFile)
     {
-        $seObjectHasFile = new SeObjectHasFile();
-        $seObjectHasFile->setSeMediaFile($seMediaFile);
-        $this->addSeObjectHasFile($seObjectHasFile);
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$seMediaFile->getSeMediaObjects()->contains($this)) { $seObjectHasFile = new SeObjectHasFile();
+            $seObjectHasFile->setSeMediaFile($seMediaFile);
+            $this->addSeObjectHasFile($seObjectHasFile);
+
+            $foreignCollection = $seMediaFile->getSeMediaObjects();
+            $foreignCollection[] = $this;
+        }
     }
 
     /**
@@ -1594,7 +1601,7 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -1659,17 +1666,5 @@ abstract class BaseSeMediaObject extends BaseObject implements Persistent
 
         return $this;
     }
-
-    // event behavior
-    public function preCommit(\PropelPDO $con = null){}
-    public function preCommitSave(\PropelPDO $con = null){}
-    public function preCommitDelete(\PropelPDO $con = null){}
-    public function preCommitUpdate(\PropelPDO $con = null){}
-    public function preCommitInsert(\PropelPDO $con = null){}
-    public function preRollback(\PropelPDO $con = null){}
-    public function preRollbackSave(\PropelPDO $con = null){}
-    public function preRollbackDelete(\PropelPDO $con = null){}
-    public function preRollbackUpdate(\PropelPDO $con = null){}
-    public function preRollbackInsert(\PropelPDO $con = null){}
 
 }

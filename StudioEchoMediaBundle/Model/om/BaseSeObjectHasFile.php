@@ -13,8 +13,6 @@ use \Propel;
 use \PropelDateTime;
 use \PropelException;
 use \PropelPDO;
-use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileQuery;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObject;
@@ -39,7 +37,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -125,12 +123,8 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      */
     public function getSeMediaObjectId()
     {
-        return $this->se_media_object_id;
-    }
 
-    public function __construct(){
-        parent::__construct();
-        EventDispatcherProxy::trigger(array('construct','model.construct'), new ModelEvent($this));
+        return $this->se_media_object_id;
     }
 
     /**
@@ -140,6 +134,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      */
     public function getSeMediaFileId()
     {
+
         return $this->se_media_file_id;
     }
 
@@ -150,6 +145,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      */
     public function getSortableRank()
     {
+
         return $this->sortable_rank;
     }
 
@@ -236,7 +232,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     /**
      * Set the value of [se_media_object_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SeObjectHasFile The current object (for fluent API support)
      */
     public function setSeMediaObjectId($v)
@@ -247,7 +243,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
 
         if ($this->se_media_object_id !== $v) {
             // sortable behavior
-            $this->oldScope = $this->getSeMediaObjectId();
+            $this->oldScope = $this->se_media_object_id;
 
             $this->se_media_object_id = $v;
             $this->modifiedColumns[] = SeObjectHasFilePeer::SE_MEDIA_OBJECT_ID;
@@ -264,7 +260,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     /**
      * Set the value of [se_media_file_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SeObjectHasFile The current object (for fluent API support)
      */
     public function setSeMediaFileId($v)
@@ -289,7 +285,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     /**
      * Set the value of [sortable_rank] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SeObjectHasFile The current object (for fluent API support)
      */
     public function setSortableRank($v)
@@ -376,7 +372,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -398,6 +394,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 5; // 5 = SeObjectHasFilePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -493,20 +490,17 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
 
         $con->beginTransaction();
         try {
-            EventDispatcherProxy::trigger(array('delete.pre','model.delete.pre'), new ModelEvent($this));
             $deleteQuery = SeObjectHasFileQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             // sortable behavior
 
-            SeObjectHasFilePeer::shiftRank(-1, $this->getSortableRank() + 1, null, $this->getSeMediaObjectId(), $con);
+            SeObjectHasFilePeer::shiftRank(-1, $this->getSortableRank() + 1, null, $this->getScopeValue(), $con);
             SeObjectHasFilePeer::clearInstancePool();
 
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
-                // event behavior
-                EventDispatcherProxy::trigger(array('delete.post', 'model.delete.post'), new ModelEvent($this));
                 $con->commit();
                 $this->setDeleted(true);
             } else {
@@ -548,13 +542,11 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             // sortable behavior
             $this->processSortableQueries($con);
-            // event behavior
-            EventDispatcherProxy::trigger('model.save.pre', new ModelEvent($this));
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // sortable behavior
                 if (!$this->isColumnModified(SeObjectHasFilePeer::RANK_COL)) {
-                    $this->setSortableRank(SeObjectHasFileQuery::create()->getMaxRank($this->getSeMediaObjectId(), $con) + 1);
+                    $this->setSortableRank(SeObjectHasFileQuery::create()->getMaxRankArray($this->getScopeValue(), $con) + 1);
                 }
 
                 // timestampable behavior
@@ -564,15 +556,12 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
                 if (!$this->isColumnModified(SeObjectHasFilePeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
-                // event behavior
-                EventDispatcherProxy::trigger('model.insert.pre', new ModelEvent($this));
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // sortable behavior
                 // if scope has changed and rank was not modified (if yes, assuming superior action)
                 // insert object to the end of new scope and cleanup old one
-                if ($this->isColumnModified(SeObjectHasFilePeer::SCOPE_COL) && !$this->isColumnModified(SeObjectHasFilePeer::RANK_COL)) {
-                    SeObjectHasFilePeer::shiftRank(-1, $this->getSortableRank() + 1, null, $this->oldScope, $con);
+                if (($this->isColumnModified(SeObjectHasFilePeer::SE_MEDIA_OBJECT_ID)) && !$this->isColumnModified(SeObjectHasFilePeer::RANK_COL)) { SeObjectHasFilePeer::shiftRank(-1, $this->getSortableRank() + 1, null, $this->oldScope, $con);
                     $this->insertAtBottom($con);
                 }
 
@@ -580,23 +569,15 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
                 if ($this->isModified() && !$this->isColumnModified(SeObjectHasFilePeer::UPDATED_AT)) {
                     $this->setUpdatedAt(time());
                 }
-                // event behavior
-                EventDispatcherProxy::trigger(array('update.pre', 'model.update.pre'), new ModelEvent($this));
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
                 if ($isInsert) {
                     $this->postInsert($con);
-                    // event behavior
-                    EventDispatcherProxy::trigger('model.insert.post', new ModelEvent($this));
                 } else {
                     $this->postUpdate($con);
-                    // event behavior
-                    EventDispatcherProxy::trigger(array('update.post', 'model.update.post'), new ModelEvent($this));
                 }
                 $this->postSave($con);
-                // event behavior
-                EventDispatcherProxy::trigger('model.save.post', new ModelEvent($this));
                 SeObjectHasFilePeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -628,7 +609,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -793,10 +774,10 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -808,7 +789,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -915,6 +896,11 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
             $keys[3] => $this->getCreatedAt(),
             $keys[4] => $this->getUpdatedAt(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aSeMediaObject) {
                 $result['SeMediaObject'] = $this->aSeMediaObject->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1151,7 +1137,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a SeMediaObject object.
      *
-     * @param             SeMediaObject $v
+     * @param                  SeMediaObject $v
      * @return SeObjectHasFile The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1203,7 +1189,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a SeMediaFile object.
      *
-     * @param             SeMediaFile $v
+     * @param                  SeMediaFile $v
      * @return SeObjectHasFile The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1276,7 +1262,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -1345,22 +1331,30 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     /**
      * Wrap the getter for scope value
      *
-     * @return    int
+     * @param boolean $returnNulls If true and all scope values are null, this will return null instead of a array full with nulls
+     *
+     * @return    mixed A array or a native type
      */
-    public function getScopeValue()
+    public function getScopeValue($returnNulls = true)
     {
-        return $this->se_media_object_id;
+
+
+        return $this->getSeMediaObjectId();
+
     }
 
     /**
      * Wrap the setter for scope value
      *
-     * @param     int
+     * @param     mixed A array or a native type
      * @return    SeObjectHasFile
      */
     public function setScopeValue($v)
     {
+
+
         return $this->setSeMediaObjectId($v);
+
     }
 
     /**
@@ -1382,7 +1376,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      */
     public function isLast(PropelPDO $con = null)
     {
-        return $this->getSortableRank() == SeObjectHasFileQuery::create()->getMaxRank($this->getSeMediaObjectId(), $con);
+        return $this->getSortableRank() == SeObjectHasFileQuery::create()->getMaxRankArray($this->getScopeValue(), $con);
     }
 
     /**
@@ -1395,7 +1389,14 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     public function getNext(PropelPDO $con = null)
     {
 
-        return SeObjectHasFileQuery::create()->findOneByRank($this->getSortableRank() + 1, $this->getSeMediaObjectId(), $con);
+        $query = SeObjectHasFileQuery::create();
+
+        $scope = $this->getScopeValue();
+
+        $query->filterByRank($this->getSortableRank() + 1, $scope);
+
+
+        return $query->findOne($con);
     }
 
     /**
@@ -1408,7 +1409,14 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     public function getPrevious(PropelPDO $con = null)
     {
 
-        return SeObjectHasFileQuery::create()->findOneByRank($this->getSortableRank() - 1, $this->getSeMediaObjectId(), $con);
+        $query = SeObjectHasFileQuery::create();
+
+        $scope = $this->getScopeValue();
+
+        $query->filterByRank($this->getSortableRank() - 1, $scope);
+
+
+        return $query->findOne($con);
     }
 
     /**
@@ -1424,7 +1432,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      */
     public function insertAtRank($rank, PropelPDO $con = null)
     {
-        $maxRank = SeObjectHasFileQuery::create()->getMaxRank($this->getSeMediaObjectId(), $con);
+        $maxRank = SeObjectHasFileQuery::create()->getMaxRankArray($this->getScopeValue(), $con);
         if ($rank < 1 || $rank > $maxRank + 1) {
             throw new PropelException('Invalid rank ' . $rank);
         }
@@ -1434,7 +1442,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
             // Keep the list modification query for the save() transaction
             $this->sortableQueries []= array(
                 'callable'  => array(self::PEER, 'shiftRank'),
-                'arguments' => array(1, $rank, null, $this->getSeMediaObjectId())
+                'arguments' => array(1, $rank, null, $this->getScopeValue())
             );
         }
 
@@ -1453,7 +1461,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
      */
     public function insertAtBottom(PropelPDO $con = null)
     {
-        $this->setSortableRank(SeObjectHasFileQuery::create()->getMaxRank($this->getSeMediaObjectId(), $con) + 1);
+        $this->setSortableRank(SeObjectHasFileQuery::create()->getMaxRankArray($this->getScopeValue(), $con) + 1);
 
         return $this;
     }
@@ -1488,7 +1496,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
         if ($con === null) {
             $con = Propel::getConnection(SeObjectHasFilePeer::DATABASE_NAME);
         }
-        if ($newRank < 1 || $newRank > SeObjectHasFileQuery::create()->getMaxRank($this->getSeMediaObjectId(), $con)) {
+        if ($newRank < 1 || $newRank > SeObjectHasFileQuery::create()->getMaxRankArray($this->getScopeValue(), $con)) {
             throw new PropelException('Invalid rank ' . $newRank);
         }
 
@@ -1501,7 +1509,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
         try {
             // shift the objects between the old and the new rank
             $delta = ($oldRank < $newRank) ? -1 : 1;
-            SeObjectHasFilePeer::shiftRank($delta, min($oldRank, $newRank), max($oldRank, $newRank), $this->getSeMediaObjectId(), $con);
+            SeObjectHasFilePeer::shiftRank($delta, min($oldRank, $newRank), max($oldRank, $newRank), $this->getScopeValue(), $con);
 
             // move the object to its new rank
             $this->setSortableRank($newRank);
@@ -1533,11 +1541,11 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
         }
         $con->beginTransaction();
         try {
-            $oldScope = $this->getSeMediaObjectId();
-            $newScope = $object->getSeMediaObjectId();
+            $oldScope = $this->getScopeValue();
+            $newScope = $object->getScopeValue();
             if ($oldScope != $newScope) {
-                $this->setSeMediaObjectId($newScope);
-                $object->setSeMediaObjectId($oldScope);
+                $this->setScopeValue($newScope);
+                $object->setScopeValue($oldScope);
             }
             $oldRank = $this->getSortableRank();
             $newRank = $object->getSortableRank();
@@ -1643,7 +1651,7 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
         }
         $con->beginTransaction();
         try {
-            $bottom = SeObjectHasFileQuery::create()->getMaxRank($this->getSeMediaObjectId(), $con);
+            $bottom = SeObjectHasFileQuery::create()->getMaxRankArray($this->getScopeValue(), $con);
             $res = $this->moveToRank($bottom, $con);
             $con->commit();
 
@@ -1665,12 +1673,12 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
     public function removeFromList(PropelPDO $con = null)
     {
         // check if object is already removed
-        if ($this->getSeMediaObjectId() === null) {
+        if ($this->getScopeValue() === null) {
             throw new PropelException('Object is already removed (has null scope)');
         }
 
         // move the object to the end of null scope
-        $this->setSeMediaObjectId(null);
+        $this->setScopeValue(null);
     //    $this->insertAtBottom($con);
 
         return $this;
@@ -1701,17 +1709,5 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
 
         return $this;
     }
-
-    // event behavior
-    public function preCommit(\PropelPDO $con = null){}
-    public function preCommitSave(\PropelPDO $con = null){}
-    public function preCommitDelete(\PropelPDO $con = null){}
-    public function preCommitUpdate(\PropelPDO $con = null){}
-    public function preCommitInsert(\PropelPDO $con = null){}
-    public function preRollback(\PropelPDO $con = null){}
-    public function preRollbackSave(\PropelPDO $con = null){}
-    public function preRollbackDelete(\PropelPDO $con = null){}
-    public function preRollbackUpdate(\PropelPDO $con = null){}
-    public function preRollbackInsert(\PropelPDO $con = null){}
 
 }

@@ -11,8 +11,6 @@ use \Persistent;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-use Glorpen\Propel\PropelBundle\Events\ModelEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18n;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18nPeer;
@@ -35,7 +33,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     protected static $peer;
 
     /**
-     * The flag var to prevent infinit loop in deep copy
+     * The flag var to prevent infinite loop in deep copy
      * @var       boolean
      */
     protected $startCopy = false;
@@ -121,7 +119,6 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     {
         parent::__construct();
         $this->applyDefaultValues();
-        EventDispatcherProxy::trigger(array('construct','model.construct'), new ModelEvent($this));
     }
 
     /**
@@ -131,6 +128,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -141,6 +139,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function getLocale()
     {
+
         return $this->locale;
     }
 
@@ -151,6 +150,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function getTitle()
     {
+
         return $this->title;
     }
 
@@ -161,6 +161,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function getDescription()
     {
+
         return $this->description;
     }
 
@@ -171,6 +172,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function getCopyright()
     {
+
         return $this->copyright;
     }
 
@@ -181,13 +183,14 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function getOnline()
     {
+
         return $this->online;
     }
 
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return SeMediaFileI18n The current object (for fluent API support)
      */
     public function setId($v)
@@ -212,12 +215,12 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     /**
      * Set the value of [locale] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SeMediaFileI18n The current object (for fluent API support)
      */
     public function setLocale($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -233,12 +236,12 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     /**
      * Set the value of [title] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SeMediaFileI18n The current object (for fluent API support)
      */
     public function setTitle($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -254,12 +257,12 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     /**
      * Set the value of [description] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SeMediaFileI18n The current object (for fluent API support)
      */
     public function setDescription($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -275,12 +278,12 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     /**
      * Set the value of [copyright] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return SeMediaFileI18n The current object (for fluent API support)
      */
     public function setCopyright($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -349,7 +352,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      * more tables.
      *
      * @param array $row The row returned by PDOStatement->fetch(PDO::FETCH_NUM)
-     * @param int $startcol 0-based offset column which indicates which restultset column to start with.
+     * @param int $startcol 0-based offset column which indicates which resultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @return int             next starting column
      * @throws PropelException - Any caught Exception will be rewrapped as a PropelException.
@@ -372,6 +375,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 6; // 6 = SeMediaFileI18nPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -463,15 +467,12 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
 
         $con->beginTransaction();
         try {
-            EventDispatcherProxy::trigger(array('delete.pre','model.delete.pre'), new ModelEvent($this));
             $deleteQuery = SeMediaFileI18nQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
-                // event behavior
-                EventDispatcherProxy::trigger(array('delete.post', 'model.delete.post'), new ModelEvent($this));
                 $con->commit();
                 $this->setDeleted(true);
             } else {
@@ -511,31 +512,19 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
         $isInsert = $this->isNew();
         try {
             $ret = $this->preSave($con);
-            // event behavior
-            EventDispatcherProxy::trigger('model.save.pre', new ModelEvent($this));
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
-                // event behavior
-                EventDispatcherProxy::trigger('model.insert.pre', new ModelEvent($this));
             } else {
                 $ret = $ret && $this->preUpdate($con);
-                // event behavior
-                EventDispatcherProxy::trigger(array('update.pre', 'model.update.pre'), new ModelEvent($this));
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
                 if ($isInsert) {
                     $this->postInsert($con);
-                    // event behavior
-                    EventDispatcherProxy::trigger('model.insert.post', new ModelEvent($this));
                 } else {
                     $this->postUpdate($con);
-                    // event behavior
-                    EventDispatcherProxy::trigger(array('update.post', 'model.update.post'), new ModelEvent($this));
                 }
                 $this->postSave($con);
-                // event behavior
-                EventDispatcherProxy::trigger('model.save.post', new ModelEvent($this));
                 SeMediaFileI18nPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -567,7 +556,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
             $this->alreadyInSave = true;
 
             // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -731,10 +720,10 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      *
      * In addition to checking the current object, all related objects will
      * also be validated.  If all pass then <code>true</code> is returned; otherwise
-     * an aggreagated array of ValidationFailed objects will be returned.
+     * an aggregated array of ValidationFailed objects will be returned.
      *
      * @param array $columns Array of column names to validate.
-     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objets otherwise.
+     * @return mixed <code>true</code> if all validations pass; array of <code>ValidationFailed</code> objects otherwise.
      */
     protected function doValidate($columns = null)
     {
@@ -746,7 +735,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
 
 
             // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
+            // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
@@ -851,6 +840,11 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
             $keys[4] => $this->getCopyright(),
             $keys[5] => $this->getOnline(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aSeMediaFile) {
                 $result['SeMediaFile'] = $this->aSeMediaFile->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1090,7 +1084,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a SeMediaFile object.
      *
-     * @param             SeMediaFile $v
+     * @param                  SeMediaFile $v
      * @return SeMediaFileI18n The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1165,7 +1159,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      *
      * This method is a user-space workaround for PHP's inability to garbage collect
      * objects with circular references (even in PHP 5.3). This is currently necessary
-     * when using Propel in certain daemon or large-volumne/high-memory operations.
+     * when using Propel in certain daemon or large-volume/high-memory operations.
      *
      * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
@@ -1202,17 +1196,5 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
     {
         return $this->alreadyInSave;
     }
-
-    // event behavior
-    public function preCommit(\PropelPDO $con = null){}
-    public function preCommitSave(\PropelPDO $con = null){}
-    public function preCommitDelete(\PropelPDO $con = null){}
-    public function preCommitUpdate(\PropelPDO $con = null){}
-    public function preCommitInsert(\PropelPDO $con = null){}
-    public function preRollback(\PropelPDO $con = null){}
-    public function preRollbackSave(\PropelPDO $con = null){}
-    public function preRollbackDelete(\PropelPDO $con = null){}
-    public function preRollbackUpdate(\PropelPDO $con = null){}
-    public function preRollbackInsert(\PropelPDO $con = null){}
 
 }

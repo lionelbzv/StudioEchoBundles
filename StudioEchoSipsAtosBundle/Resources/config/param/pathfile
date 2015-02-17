@@ -1,0 +1,49 @@
+#########################################################################
+#
+#	Pathfile 
+#
+#	Liste des fichiers parametres utilises par le module de paiement
+#
+#########################################################################
+#
+#
+#-------------------------------------------------------------------------
+# Activation (YES) / Désactivation (NO) du mode DEBUG
+#-------------------------------------------------------------------------
+#
+DEBUG!YES!
+#
+# ------------------------------------------------------------------------
+# Chemin vers le répertoire des logos depuis le web alias  
+# Exemple pour le répertoire www.merchant.com/mercanet/payment/logo/
+# indiquer:
+# ------------------------------------------------------------------------
+#
+D_LOGO!/bundles/studioechosipsatos/images/logo/!
+#
+# --------------------------------------------------------------------------
+#  Fichiers paramètres liés à l'api mercanet paiement	
+# --------------------------------------------------------------------------
+# dev /     Fichier différent à utiliser et à déposer ds une arbo sans espace ' '
+# re7 /     /var/www/mellis.naturallis.letitbug.com/src/StudioEchoBundles/StudioEchoSipsAtosBundle/Resources/config/param/
+# prod /    /homez.676/murielgunf/src/StudioEchoBundles/StudioEchoSipsAtosBundle/Resources/config/param/parmcom.mercanet
+#
+# fichier des  paramètres mercanet
+#
+F_DEFAULT!/var/www/mellis.naturallis.letitbug.com/src/StudioEchoBundles/StudioEchoSipsAtosBundle/Resources/config/param/parmcom.mercanet!
+#
+# fichier paramètre commercant
+#
+F_PARAM!/var/www/mellis.naturallis.letitbug.com/src/StudioEchoBundles/StudioEchoSipsAtosBundle/Resources/config/param/parmcom!
+#
+# certificat du commercant
+#
+F_CERTIFICATE!/var/www/mellis.naturallis.letitbug.com/src/StudioEchoBundles/StudioEchoSipsAtosBundle/Resources/config/param/certif!
+# 
+# type du certificat 	
+# 
+F_CTYPE!php!
+#
+# --------------------------------------------------------------------------
+# 	end of file
+# --------------------------------------------------------------------------

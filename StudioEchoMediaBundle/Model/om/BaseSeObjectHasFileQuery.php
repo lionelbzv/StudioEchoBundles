@@ -12,8 +12,6 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-use Glorpen\Propel\PropelBundle\Events\QueryEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObject;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFile;
@@ -69,10 +67,15 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeObjectHasFile', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'default';
+        }
+        if (null === $modelName) {
+            $modelName = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeObjectHasFile';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
-        EventDispatcherProxy::trigger(array('construct','query.construct'), new QueryEvent($this));
     }
 
     /**
@@ -88,10 +91,8 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
         if ($criteria instanceof SeObjectHasFileQuery) {
             return $criteria;
         }
-        $query = new static();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new SeObjectHasFileQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -120,7 +121,7 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
             return null;
         }
         if ((null !== ($obj = SeObjectHasFilePeer::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
-            // the object is alredy in the instance pool
+            // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
@@ -160,8 +161,7 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $cls = SeObjectHasFilePeer::getOMClass();
-            $obj = new $cls;
+            $obj = new SeObjectHasFile();
             $obj->hydrate($row);
             SeObjectHasFilePeer::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
         }
@@ -387,7 +387,7 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
      * <code>
      * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
      * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $createdAt The value to use as filter.
@@ -430,7 +430,7 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
      * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
      * </code>
      *
      * @param     mixed $updatedAt The value to use as filter.
@@ -636,100 +636,36 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
         return $this;
     }
 
-    /**
-     * Code to execute before every SELECT statement
-     *
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePreSelect(PropelPDO $con)
-    {
-        // event behavior
-        EventDispatcherProxy::trigger('query.select.pre', new QueryEvent($this));
-
-        return $this->preSelect($con);
-    }
-
-    /**
-     * Code to execute before every DELETE statement
-     *
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePreDelete(PropelPDO $con)
-    {
-        EventDispatcherProxy::trigger(array('delete.pre','query.delete.pre'), new QueryEvent($this));
-        // event behavior
-        // placeholder, issue #5
-
-        return $this->preDelete($con);
-    }
-
-    /**
-     * Code to execute after every DELETE statement
-     *
-     * @param     int $affectedRows the number of deleted rows
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePostDelete($affectedRows, PropelPDO $con)
-    {
-        // event behavior
-        EventDispatcherProxy::trigger(array('delete.post','query.delete.post'), new QueryEvent($this));
-
-        return $this->postDelete($affectedRows, $con);
-    }
-
-    /**
-     * Code to execute before every UPDATE statement
-     *
-     * @param     array $values The associatiove array of columns and values for the update
-     * @param     PropelPDO $con The connection object used by the query
-     * @param     boolean $forceIndividualSaves If false (default), the resulting call is a BasePeer::doUpdate(), ortherwise it is a series of save() calls on all the found objects
-     */
-    protected function basePreUpdate(&$values, PropelPDO $con, $forceIndividualSaves = false)
-    {
-        // event behavior
-        EventDispatcherProxy::trigger(array('update.pre', 'query.update.pre'), new QueryEvent($this));
-
-        return $this->preUpdate($values, $con, $forceIndividualSaves);
-    }
-
-    /**
-     * Code to execute after every UPDATE statement
-     *
-     * @param     int $affectedRows the number of udated rows
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePostUpdate($affectedRows, PropelPDO $con)
-    {
-        // event behavior
-        EventDispatcherProxy::trigger(array('update.post', 'query.update.post'), new QueryEvent($this));
-
-        return $this->postUpdate($affectedRows, $con);
-    }
-
     // sortable behavior
 
     /**
      * Returns the objects in a certain list, from the list scope
      *
-     * @param     int $scope		Scope to determine which objects node to return
+     * @param int $scope Scope to determine which objects node to return
      *
-     * @return    SeObjectHasFileQuery The current query, for fluid interface
+     * @return SeObjectHasFileQuery The current query, for fluid interface
      */
-    public function inList($scope = null)
+    public function inList($scope)
     {
-        return $this->addUsingAlias(SeObjectHasFilePeer::SCOPE_COL, $scope, Criteria::EQUAL);
+
+        SeObjectHasFilePeer::sortableApplyScopeCriteria($this, $scope, 'addUsingAlias');
+
+        return $this;
     }
 
     /**
      * Filter the query based on a rank in the list
      *
      * @param     integer   $rank rank
-     * @param     int $scope		Scope to determine which suite to consider
+     * @param int $scope Scope to determine which objects node to return
+
      *
      * @return    SeObjectHasFileQuery The current query, for fluid interface
      */
-    public function filterByRank($rank, $scope = null)
+    public function filterByRank($rank, $scope)
     {
+
+
         return $this
             ->inList($scope)
             ->addUsingAlias(SeObjectHasFilePeer::RANK_COL, $rank, Criteria::EQUAL);
@@ -762,13 +698,14 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
      * Get an item from the list based on its rank
      *
      * @param     integer   $rank rank
-     * @param     int $scope		Scope to determine which suite to consider
+     * @param int $scope Scope to determine which objects node to return
      * @param     PropelPDO $con optional connection
      *
      * @return    SeObjectHasFile
      */
-    public function findOneByRank($rank, $scope = null, PropelPDO $con = null)
+    public function findOneByRank($rank, $scope, PropelPDO $con = null)
     {
+
         return $this
             ->filterByRank($rank, $scope)
             ->findOne($con);
@@ -777,13 +714,16 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
     /**
      * Returns a list of objects
      *
-     * @param      int $scope		Scope to determine which list to return
+     * @param int $scope Scope to determine which objects node to return
+
      * @param      PropelPDO $con	Connection to use.
      *
      * @return     mixed the list of results, formatted by the current formatter
      */
-    public function findList($scope = null, $con = null)
+    public function findList($scope, $con = null)
     {
+
+
         return $this
             ->inList($scope)
             ->orderByRank()
@@ -793,19 +733,43 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
     /**
      * Get the highest rank
      *
-     * @param      int $scope		Scope to determine which suite to consider
+     * @param int $scope Scope to determine which objects node to return
+
      * @param     PropelPDO optional connection
      *
      * @return    integer highest position
      */
-    public function getMaxRank($scope = null, PropelPDO $con = null)
+    public function getMaxRank($scope, PropelPDO $con = null)
     {
         if ($con === null) {
             $con = Propel::getConnection(SeObjectHasFilePeer::DATABASE_NAME);
         }
         // shift the objects with a position lower than the one of object
         $this->addSelectColumn('MAX(' . SeObjectHasFilePeer::RANK_COL . ')');
-        $this->add(SeObjectHasFilePeer::SCOPE_COL, $scope, Criteria::EQUAL);
+
+        SeObjectHasFilePeer::sortableApplyScopeCriteria($this, $scope);
+        $stmt = $this->doSelect($con);
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Get the highest rank by a scope with a array format.
+     *
+     * @param     int $scope		The scope value as scalar type or array($value1, ...).
+
+     * @param     PropelPDO optional connection
+     *
+     * @return    integer highest position
+     */
+    public function getMaxRankArray($scope, PropelPDO $con = null)
+    {
+        if ($con === null) {
+            $con = Propel::getConnection(SeObjectHasFilePeer::DATABASE_NAME);
+        }
+        // shift the objects with a position lower than the one of object
+        $this->addSelectColumn('MAX(' . SeObjectHasFilePeer::RANK_COL . ')');
+        SeObjectHasFilePeer::sortableApplyScopeCriteria($this, $scope);
         $stmt = $this->doSelect($con);
 
         return $stmt->fetchColumn();
@@ -841,7 +805,7 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
             $con->commit();
 
             return true;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollback();
             throw $e;
         }
@@ -911,14 +875,5 @@ abstract class BaseSeObjectHasFileQuery extends ModelCriteria
     public function firstCreatedFirst()
     {
         return $this->addAscendingOrderByColumn(SeObjectHasFilePeer::CREATED_AT);
-    }
-    // extend behavior
-    public function setFormatter($formatter)
-    {
-        if (is_string($formatter) && $formatter === \ModelCriteria::FORMAT_ON_DEMAND) {
-            $formatter = '\Glorpen\Propel\PropelBundle\Formatter\PropelOnDemandFormatter';
-        }
-
-        return parent::setFormatter($formatter);
     }
 }

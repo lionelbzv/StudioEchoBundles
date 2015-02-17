@@ -9,18 +9,6 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
-use Glorpen\Propel\PropelBundle\Events\DetectOMClassEvent;
-use Glorpen\Propel\PropelBundle\Events\PeerEvent;
-use MontcalmAventure\Model\ActivityDocLibPeer;
-use MontcalmAventure\Model\ActivityInsertDocLibPeer;
-use MontcalmAventure\Model\ActivitySubDocLibPeer;
-use MontcalmAventure\Model\ContentGenericDocLibPeer;
-use MontcalmAventure\Model\ContentNewsDocLibPeer;
-use MontcalmAventure\Model\ContentOfferDocLibPeer;
-use MontcalmAventure\Model\ContentProfileDocLibPeer;
-use MontcalmAventure\Model\ContentStayDocLibPeer;
-use MontcalmAventure\Model\ContentWishDocLibPeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFile;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileI18nPeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFilePeer;
@@ -40,7 +28,7 @@ abstract class BaseSeMediaFilePeer
     const OM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\SeMediaFile';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'SeMediaFileTableMap';
+    const TM_CLASS = 'StudioEchoBundles\\StudioEchoMediaBundle\\Model\\map\\SeMediaFileTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 11;
@@ -88,7 +76,7 @@ abstract class BaseSeMediaFilePeer
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identiy map to hold any loaded instances of SeMediaFile objects.
+     * An identity map to hold any loaded instances of SeMediaFile objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
      * @var        array SeMediaFile[]
@@ -279,7 +267,7 @@ abstract class BaseSeMediaFilePeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return                 SeMediaFile
+     * @return SeMediaFile
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -346,7 +334,7 @@ abstract class BaseSeMediaFilePeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param      SeMediaFile $obj A SeMediaFile object.
+     * @param SeMediaFile $obj A SeMediaFile object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -396,7 +384,7 @@ abstract class BaseSeMediaFilePeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   SeMediaFile Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return SeMediaFile Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -417,10 +405,8 @@ abstract class BaseSeMediaFilePeer
      */
     public static function clearInstancePool($and_clear_all_references = false)
     {
-      if ($and_clear_all_references)
-      {
-        foreach (SeMediaFilePeer::$instances as $instance)
-        {
+      if ($and_clear_all_references) {
+        foreach (SeMediaFilePeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
@@ -433,33 +419,6 @@ abstract class BaseSeMediaFilePeer
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in ActivityDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ActivityDocLibPeer::clearInstancePool();
-        // Invalidate objects in ActivitySubDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ActivitySubDocLibPeer::clearInstancePool();
-        // Invalidate objects in ActivityInsertDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ActivityInsertDocLibPeer::clearInstancePool();
-        // Invalidate objects in ContentProfileDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ContentProfileDocLibPeer::clearInstancePool();
-        // Invalidate objects in ContentWishDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ContentWishDocLibPeer::clearInstancePool();
-        // Invalidate objects in ContentNewsDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ContentNewsDocLibPeer::clearInstancePool();
-        // Invalidate objects in ContentGenericDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ContentGenericDocLibPeer::clearInstancePool();
-        // Invalidate objects in ContentOfferDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ContentOfferDocLibPeer::clearInstancePool();
-        // Invalidate objects in ContentStayDocLibPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ContentStayDocLibPeer::clearInstancePool();
         // Invalidate objects in SeObjectHasFilePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         SeObjectHasFilePeer::clearInstancePool();
@@ -553,7 +512,7 @@ abstract class BaseSeMediaFilePeer
             // $obj->hydrate($row, $startcol, true); // rehydrate
             $col = $startcol + SeMediaFilePeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = SeMediaFilePeer::getOMClass($row, $startcol);
+            $cls = SeMediaFilePeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
             SeMediaFilePeer::addInstanceToPool($obj, $key);
@@ -581,7 +540,7 @@ abstract class BaseSeMediaFilePeer
     {
       $dbMap = Propel::getDatabaseMap(BaseSeMediaFilePeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseSeMediaFilePeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new SeMediaFileTableMap());
+        $dbMap->addTableObject(new \StudioEchoBundles\StudioEchoMediaBundle\Model\map\SeMediaFileTableMap());
       }
     }
 
@@ -593,13 +552,6 @@ abstract class BaseSeMediaFilePeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-
-        $event = new DetectOMClassEvent(SeMediaFilePeer::OM_CLASS, $row, $colnum);
-        EventDispatcherProxy::trigger('om.detect', $event);
-        if($event->isDetected()){
-            return $event->getDetectedClass();
-        }
-
         return SeMediaFilePeer::OM_CLASS;
     }
 
@@ -638,7 +590,7 @@ abstract class BaseSeMediaFilePeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -711,7 +663,7 @@ abstract class BaseSeMediaFilePeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -770,7 +722,7 @@ abstract class BaseSeMediaFilePeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -783,7 +735,7 @@ abstract class BaseSeMediaFilePeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param      SeMediaFile $obj The object to validate.
+     * @param SeMediaFile $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -816,7 +768,7 @@ abstract class BaseSeMediaFilePeer
     /**
      * Retrieve a single object by pkey.
      *
-     * @param      int $pk the primary key.
+     * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
      * @return SeMediaFile
      */
@@ -872,4 +824,3 @@ abstract class BaseSeMediaFilePeer
 //
 BaseSeMediaFilePeer::buildTableMap();
 
-EventDispatcherProxy::trigger(array('construct','peer.construct'), new PeerEvent('StudioEchoBundles\StudioEchoMediaBundle\Model\om\BaseSeMediaFilePeer'));
