@@ -11,11 +11,11 @@ use ZendSearch\Lucene\Search\QueryParser;
  * SF2 adaptation of sf1.4 rsLucenePlugin
  *  TODO:
  *    - optimisation / boost / config
- *    -   
  *
  * @author     Lionel Bouzonville / Studio Echo
  */
-class IvoryLuceneIndexation {
+class IvoryLuceneIndexation
+{
     // Logger
     private $logger;
   
@@ -28,7 +28,8 @@ class IvoryLuceneIndexation {
     /**
      *
      */
-    public function __construct(\Ivory\LuceneSearchBundle\Model\LuceneManager $lucene, \Symfony\Component\HttpKernel\Log\LoggerInterface $logger = null) {
+    public function __construct(\Ivory\LuceneSearchBundle\Model\LuceneManager $lucene, \Symfony\Component\HttpKernel\Log\LoggerInterface $logger = null)
+    {
         $this->lucene = $lucene;
         $this->logger = $logger;
     }
@@ -91,28 +92,29 @@ class IvoryLuceneIndexation {
      * updates a document
      * @param sfBaseObject
      */
-    public function updateAll(\Symfony\Component\Console\Output\OutputInterface $output = null) {
-        // $this->logger->info('config = '.print_r($this->config, true));
-
-        foreach ($this->config as $className => $parameters) { 
+    public function updateAll()
+    {
+        $nbIndexed = 0;
+        foreach ($this->config as $className => $parameters) {
             $query = call_user_func($className.'Query' . "::create");
             $results = $query->find();
 
             foreach ($results as $object) {
                 $this->updateDocument($object, $className);
 
-                if ($output) {
-                  $output->write('.');
-                }
+                $nbIndexed++;
             }
         }
+
+        return $nbIndexed;
     }
 
-  /**
-   * updates a document
-   * @param sfBaseObject
-   */
-  public function updateDocument($object, $className) {
+    /**
+     * updates a document
+     * @param sfBaseObject
+     */
+    public function updateDocument($object, $className)
+    {
         if ($this->logger) {
             $this->logger->info('updateDocument');
             // $this->logger->info('object = '.print_r($object, true));
@@ -134,43 +136,43 @@ class IvoryLuceneIndexation {
 
         // Check Status actif
         if ($object->isActiv()) {
-          // Create a new document
-          $document = new Document();
-
-          // Construction dynamique des méthodes pour récupérer: id, title, description
-          $getId = 'get'.ucfirst($configClass['pk']);
-          $getTitle = $configClass['title']['method'];
-          $getDescriptionMethods = $configClass['description']['methods'];
-
-          $document->addField(Field::keyword(str_replace('\\', '_', $className).'_id', $object->$getId()));
-          $document->addField(Field::text('title', $object->$getTitle()), 'utf-8');
-
-          $description = '';
-          foreach ($getDescriptionMethods as $getDescription) {
-            $description .= $object->$getDescription() . ' ';
-          }
-          $document->addField(Field::text('description', $description, 'utf-8'));
-
-          $document->addField(Field::unIndexed('class', $className));
-          $document->addField(Field::unIndexed('object_id', $object->$getId()));
-
-          // Add your document to the index
-          $index->addDocument($document);
-          if ($this->logger) {
-            $this->logger->info('add document ok');
-          }
-
-          // Commit your change
-          $index->commit();
-          if ($this->logger) {
-              $this->logger->info('commit ok');
-          }
-
-          // If you want you can optimize your index
-          $index->optimize();
-          if ($this->logger) {
-              $this->logger->info('optimize ok');
-          }
+            // Create a new document
+            $document = new Document();
+    
+            // Construction dynamique des méthodes pour récupérer: id, title, description
+            $getId = 'get'.ucfirst($configClass['pk']);
+            $getTitle = $configClass['title']['method'];
+            $getDescriptionMethods = $configClass['description']['methods'];
+    
+            $document->addField(Field::keyword(str_replace('\\', '_', $className).'_id', $object->$getId()));
+            $document->addField(Field::text('title', $object->$getTitle()), 'utf-8');
+    
+            $description = '';
+            foreach ($getDescriptionMethods as $getDescription) {
+                $description .= $object->$getDescription() . ' ';
+            }
+            $document->addField(Field::text('description', $description, 'utf-8'));
+    
+            $document->addField(Field::unIndexed('class', $className));
+            $document->addField(Field::unIndexed('object_id', $object->$getId()));
+    
+            // Add your document to the index
+            $index->addDocument($document);
+            if ($this->logger) {
+                $this->logger->info('add document ok');
+            }
+    
+            // Commit your change
+            $index->commit();
+            if ($this->logger) {
+                $this->logger->info('commit ok');
+            }
+    
+            // If you want you can optimize your index
+            $index->optimize();
+            if ($this->logger) {
+                $this->logger->info('optimize ok');
+            }
         }
     }
 
@@ -178,7 +180,8 @@ class IvoryLuceneIndexation {
      * deletes a document
      * @param sfBaseObject $object
      */
-    public function deleteDocument($object, $className) {
+    public function deleteDocument($object, $className)
+    {
         if ($this->logger) {
             $this->logger->info('deleteDocument');
             // $this->logger->info('object = '.print_r($object, true));
@@ -213,7 +216,8 @@ class IvoryLuceneIndexation {
      *
      * @return Zend_Search_Lucene_QueryParser
      */
-    public function getQueryParser($queryStr) {
+    public function getQueryParser($queryStr)
+    {
         $query = QueryParser::parse($queryStr);
 
         return $query;
@@ -228,7 +232,8 @@ class IvoryLuceneIndexation {
      * @param $fuzzy      Indice de recherche fuzzy (entre 0 et 1), false sinon
      * @return array      Zend_Search_Lucene_Search_QueryHit
      */
-    public function search($index, $queryStr, $category = 'content', $fuzzy = false, $operator = 'and') {
+    public function search($index, $queryStr, $category = 'content', $fuzzy = false, $operator = 'and')
+    {
         if ($this->logger) {
             $this->logger->info('search');
             $this->logger->info('$index = '.print_r($index, true));
@@ -237,12 +242,12 @@ class IvoryLuceneIndexation {
             $this->logger->info('$fuzzy = '.print_r($fuzzy, true));
         }
 
-        if ($fuzzy && is_float($fuzzy) && $fuzzy <= 1 && $fuzzy > 0 && FALSE === strpos($queryStr, ' ')) {
-          $queryStr = $queryStr . '~' . $fuzzy;
+        if ($fuzzy && is_float($fuzzy) && $fuzzy <= 1 && $fuzzy > 0 && false === strpos($queryStr, ' ')) {
+            $queryStr = $queryStr . '~' . $fuzzy;
         }
 
         if ($operator == 'and') {
-          $queryStr = str_replace(' ', ' +', $queryStr);
+            $queryStr = str_replace(' ', ' +', $queryStr);
         }
 
         $this->logger->info('$queryStr = '.print_r($queryStr, true));
