@@ -92,27 +92,6 @@ class IvoryLuceneIndexation
      * updates a document
      * @param sfBaseObject
      */
-    public function updateAll()
-    {
-        $nbIndexed = 0;
-        foreach ($this->config as $className => $parameters) {
-            $query = call_user_func($className.'Query' . "::create");
-            $results = $query->find();
-
-            foreach ($results as $object) {
-                $this->updateDocument($object, $className);
-
-                $nbIndexed++;
-            }
-        }
-
-        return $nbIndexed;
-    }
-
-    /**
-     * updates a document
-     * @param sfBaseObject
-     */
     public function updateDocument($object, $className)
     {
         if ($this->logger) {

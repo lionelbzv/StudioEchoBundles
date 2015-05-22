@@ -58,21 +58,26 @@ class IndexDocumentCommand extends ContainerAwareCommand
         // Indexation
         $ivoryIndexation = $this->getContainer()->get('ivory_lucene_indexation');
 
+        $config = $this->getContainer()->getParameter('studio_echo_ivory_lucene_indexation');
+        if (!$className) {
+            $classNames = $this->getContainer()->getParameter('studio_echo_ivory_lucene_indexation');
+        } else {
+            $classNames = [ $className => $className ];
+        }
+
         $nbIndexed = 0;
-        if ($className) {
-            // Récupération de tous les objets de la classe fournie
+        foreach ($classNames as $className => $parameters) {
+            $output->writeln('----------------------------------------------');
+            $output->writeln(sprintf('Indexation des instances de la classe "%s"', $className));
             $query = call_user_func($className.'Query' . "::create");
             $results = $query->find();
 
             foreach ($results as $instance) {
-                if ($isVerbose) {
-                    $output->writeln(sprintf('Indexation de "%s" de la classe "%s"', $instance->__toString(), $className));
-                }
+                $output->writeln('***************************************************');
+                $output->writeln(sprintf('%s', $instance->__toString()));
                 $ivoryIndexation->updateDocument($instance, $className);
                 $nbIndexed++;
             }
-        } else {
-            $nbIndexed = $ivoryIndexation->updateAll($output);
         }
 
         $output->writeln('<info>L\'indexation est terminée.</info>');

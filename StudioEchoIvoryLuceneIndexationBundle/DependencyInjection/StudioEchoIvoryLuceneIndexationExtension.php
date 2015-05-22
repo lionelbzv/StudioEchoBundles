@@ -32,7 +32,10 @@ class StudioEchoIvoryLuceneIndexationExtension extends Extension
         if (!empty($config)) {
             $this->loadConfig($config, $container);
         }
-    } 
+
+        // load config in container
+        $container->setParameter('studio_echo_ivory_lucene_indexation', $config);
+    }
 
     /**
      * Loads configuration
