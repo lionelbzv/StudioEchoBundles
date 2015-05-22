@@ -26,9 +26,9 @@ class MediaExtension extends \Twig_Extension
     }
     
     /**
-     * 
+     *
      */
-    public function seMediaGetName($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1, $rank = null)
+    public function seMediaGetName($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1, $rank = null)
     {
         $seMediaFile = StudioEchoMediaManager::getMedia($objectId, $objectClassname, $locale, $categoryId, $rank);
         
@@ -40,9 +40,9 @@ class MediaExtension extends \Twig_Extension
     }
 
     /**
-     * 
+     *
      */
-    public function seMediaGetList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1)
+    public function seMediaGetList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1)
     {
         $seMediaList = StudioEchoMediaManager::getMediaList($objectId, $objectClassname, $locale, $categoryId);
         
@@ -50,14 +50,14 @@ class MediaExtension extends \Twig_Extension
     }
 
     /**
-     * 
+     *
      */
-    public function seMediaGetFileNames($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1)
+    public function seMediaGetFileNames($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1)
     {
         $seMediaList = StudioEchoMediaManager::getMediaList($objectId, $objectClassname, $locale, $categoryId);
 
         $fileNames = array();
-        foreach($seMediaList as $media) {
+        foreach ($seMediaList as $media) {
             $fileNames[] = $media->getName();
         }
         
