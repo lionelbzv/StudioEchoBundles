@@ -56,10 +56,6 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
-                    ->scalarNode('category')
-                        ->defaultValue('content')
-                        ->info('Category name for managing multi criterias search.')
-                    ->end()
                 ->end()
             ->end();
 

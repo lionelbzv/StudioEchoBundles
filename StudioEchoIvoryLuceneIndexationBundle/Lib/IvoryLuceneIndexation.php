@@ -47,7 +47,6 @@ class IvoryLuceneIndexation
      *       boost:  1
      *       methods: [ getDescription ]
      *     route:    MyRoute
-     *     category: content
      *
      * @param array $indexes The lucene indexes.
      *
@@ -78,10 +77,6 @@ class IvoryLuceneIndexation
 
             if (!isset($index['description']['methods'])) {
                 $index['description']['methods'] = array('getDescription');
-            }
-
-            if (!isset($index['category'])) {
-                $index['category'] = 'content';
             }
 
             $this->config[$identifier] = $index;
@@ -211,13 +206,12 @@ class IvoryLuceneIndexation
      * @param $fuzzy      Indice de recherche fuzzy (entre 0 et 1), false sinon
      * @return array      Zend_Search_Lucene_Search_QueryHit
      */
-    public function search($index, $queryStr, $category = 'content', $fuzzy = false, $operator = 'and')
+    public function search($index, $queryStr, $fuzzy = false, $operator = 'and')
     {
         if ($this->logger) {
             $this->logger->info('search');
             $this->logger->info('$index = '.print_r($index, true));
             $this->logger->info('$queryStr = '.print_r($queryStr, true));
-            $this->logger->info('$category = '.print_r($category, true));
             $this->logger->info('$fuzzy = '.print_r($fuzzy, true));
         }
 
