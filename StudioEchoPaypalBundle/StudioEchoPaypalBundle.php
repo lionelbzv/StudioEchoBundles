@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoPaypalBundle;
+namespace StudioEchoBundles\StudioEchoPaypalBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -1,7 +1,7 @@
 <?php
 # Test/MyBundle/Twig/Extension/MyBundleExtension.php
 
-namespace StudioEcho\StudioEchoPaypalBundle\Twig\Extension;
+namespace StudioEchoBundles\StudioEchoPaypalBundle\Twig\Extension;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

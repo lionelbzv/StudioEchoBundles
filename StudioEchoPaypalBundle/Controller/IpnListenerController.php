@@ -1,11 +1,11 @@
 <?php
 
-namespace StudioEcho\StudioEchoPaypalBundle\Controller;
+namespace StudioEchoBundles\StudioEchoPaypalBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use StudioEcho\StudioEchoPaypalBundle\Lib\PaypalIpnManager;
+use StudioEchoBundles\StudioEchoPaypalBundle\Lib\PaypalIpnManager;
 
 /**
  *  Sample listener controller for IPN messages

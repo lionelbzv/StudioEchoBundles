@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoPaypalBundle\Lib;
+namespace StudioEchoBundles\StudioEchoPaypalBundle\Lib;
 
 use Symfony\Component\DependencyInjection;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;

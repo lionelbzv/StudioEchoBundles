@@ -5,7 +5,7 @@
    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="twig.extension.se.paypal" class="StudioEcho\StudioEchoPaypalBundle\Twig\Extension\PaypalExtension" public="false">
+        <service id="twig.extension.se.paypal" class="StudioEchoBundles\StudioEchoPaypalBundle\Twig\Extension\PaypalExtension" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="service_container" />
         </service>

@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoPaypalBundle\Tests\Controller;
+namespace StudioEchoBundles\StudioEchoPaypalBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

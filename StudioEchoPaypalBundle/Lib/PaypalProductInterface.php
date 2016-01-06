@@ -1,6 +1,6 @@
 <?php
 
-namespace StudioEcho\StudioEchoPaypalBundle\Lib;
+namespace StudioEchoBundles\StudioEchoPaypalBundle\Lib;
 
 /**
  * Description of PaypalBasketInterface
