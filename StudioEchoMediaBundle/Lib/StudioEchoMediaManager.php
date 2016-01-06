@@ -19,7 +19,7 @@ class StudioEchoMediaManager {
      * @param type $fileNumber
      * @return string
      */
-    public static function getMedia($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1, $rank = null) {
+    public static function getMedia($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1, $rank = null) {
         return SeMediaFileQuery::create()
                 ->joinWithI18n($locale)
                 ->useSeObjectHasFileQuery()
@@ -46,7 +46,7 @@ class StudioEchoMediaManager {
      * @param type $category
      * @return string
      */
-    public static function getMediaList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1) {
+    public static function getMediaList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1) {
         return SeMediaFileQuery::create()
                 ->joinWithI18n($locale)
                 ->useSeObjectHasFileQuery()
