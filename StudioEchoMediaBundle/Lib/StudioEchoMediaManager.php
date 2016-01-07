@@ -9,17 +9,19 @@ use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaFileQuery;
  * 
  * @author Lionel Bouzonville / Studio Echo
  */
-class StudioEchoMediaManager {
+class StudioEchoMediaManager
+{
     /**
      * Retourne 1 fichier média associé à l'objet identifié en paramètre.
-     * 
+     *
      * @param type $objectId
      * @param type $objectClass
      * @param type $category
      * @param type $fileNumber
      * @return string
      */
-    public static function getMedia($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1, $rank = null) {
+    public static function getMedia($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1, $rank = null)
+    {
         return SeMediaFileQuery::create()
                 ->joinWithI18n($locale)
                 ->useSeObjectHasFileQuery()
@@ -40,13 +42,14 @@ class StudioEchoMediaManager {
     
     /**
      * Retourne tous les fichiers médias associés à l'objet identifié en paramètre.
-     * 
+     *
      * @param type $objectId
      * @param type $objectClass
      * @param type $category
      * @return string
      */
-    public static function getMediaList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr_FR', $categoryId = 1) {
+    public static function getMediaList($objectId = 1, $objectClassname = 'My\Object\Model', $locale = 'fr', $categoryId = 1)
+    {
         return SeMediaFileQuery::create()
                 ->joinWithI18n($locale)
                 ->useSeObjectHasFileQuery()
@@ -61,4 +64,3 @@ class StudioEchoMediaManager {
                 ->find();
     }
 }
-?>

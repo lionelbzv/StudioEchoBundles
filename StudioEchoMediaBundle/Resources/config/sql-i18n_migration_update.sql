@@ -11,7 +11,7 @@ ALTER TABLE `se_media_file`
 ALTER TABLE `se_media_file_i18n`
     ADD `online` TINYINT(1) AFTER `copyright`;
 
-ALTER TABLE `se_media_file_i18n` CHANGE `locale` `locale` VARCHAR(5) DEFAULT 'fr_FR' NOT NULL;
+ALTER TABLE `se_media_file_i18n` CHANGE `locale` `locale` VARCHAR(5) DEFAULT 'fr' NOT NULL;
 
 UPDATE `se_media_file_i18n` as i18n, `se_media_file` as base
 SET base.name = i18n.name
@@ -21,12 +21,6 @@ WHERE i18n.id = base.id;
 UPDATE `se_media_file_i18n` as i18n, `se_media_file` as base
 SET i18n.online = base.online
 WHERE i18n.id = base.id;
-
-# /!\ non testé
-UPDATE `se_media_file_i18n` as i18n
-SET i18n.locale = 'fr_FR'
-WHERE i18n.locale = 'fr';
-
 
 ALTER TABLE `se_media_file_i18n` DROP `name`;
 

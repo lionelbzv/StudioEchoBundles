@@ -90,7 +90,7 @@ abstract class BaseSeMediaFilePeer
      * The default locale to use for translations
      * @var        string
      */
-    const DEFAULT_LOCALE = 'fr_FR';
+    const DEFAULT_LOCALE = 'fr';
     /**
      * holds an array of fieldnames
      *

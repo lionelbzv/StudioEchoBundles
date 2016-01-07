@@ -60,7 +60,7 @@ class UploadMediaController extends Controller {
             $objectName, 
             $objectId, 
             $mediaParameterConfigKey,
-            $culture = 'fr_FR'
+            $culture = 'fr'
     ) {
         $logger = $this->get('logger');
         $logger->info('UploadMediaController');

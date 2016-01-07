@@ -43,7 +43,7 @@ class SeMediaFileI18nTableMap extends TableMap
         $this->setUseIdGenerator(false);
         // columns
         $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'se_media_file', 'id', true, null, null);
-        $this->addPrimaryKey('locale', 'Locale', 'VARCHAR', true, 5, 'fr_FR');
+        $this->addPrimaryKey('locale', 'Locale', 'VARCHAR', true, 5, 'fr');
         $this->addColumn('title', 'Title', 'VARCHAR', false, 250, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addColumn('copyright', 'Copyright', 'LONGVARCHAR', false, null, null);

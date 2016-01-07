@@ -156,7 +156,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      * Current locale
      * @var        string
      */
-    protected $currentLocale = 'fr_FR';
+    protected $currentLocale = 'fr';
 
     /**
      * Current translation objects
@@ -2291,7 +2291,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
         } // if ($deep)
 
         // i18n behavior
-        $this->currentLocale = 'fr_FR';
+        $this->currentLocale = 'fr';
         $this->currentTranslations = null;
 
         if ($this->collSeObjectHasFiles instanceof PropelCollection) {
@@ -2337,7 +2337,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      *
      * @return    SeMediaFile The current object (for fluent API support)
      */
-    public function setLocale($locale = 'fr_FR')
+    public function setLocale($locale = 'fr')
     {
         $this->currentLocale = $locale;
 
@@ -2361,7 +2361,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      * @param     PropelPDO $con an optional connection object
      *
      * @return SeMediaFileI18n */
-    public function getTranslation($locale = 'fr_FR', PropelPDO $con = null)
+    public function getTranslation($locale = 'fr', PropelPDO $con = null)
     {
         if (!isset($this->currentTranslations[$locale])) {
             if (null !== $this->collSeMediaFileI18ns) {
@@ -2396,7 +2396,7 @@ abstract class BaseSeMediaFile extends BaseObject implements Persistent
      *
      * @return    SeMediaFile The current object (for fluent API support)
      */
-    public function removeTranslation($locale = 'fr_FR', PropelPDO $con = null)
+    public function removeTranslation($locale = 'fr', PropelPDO $con = null)
     {
         if (!$this->isNew()) {
             SeMediaFileI18nQuery::create()

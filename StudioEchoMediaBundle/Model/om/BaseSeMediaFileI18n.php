@@ -46,7 +46,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
 
     /**
      * The value for the locale field.
-     * Note: this column has a database default value of: 'fr_FR'
+     * Note: this column has a database default value of: 'fr'
      * @var        string
      */
     protected $locale;
@@ -108,7 +108,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->locale = 'fr_FR';
+        $this->locale = 'fr';
     }
 
     /**
@@ -335,7 +335,7 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->locale !== 'fr_FR') {
+            if ($this->locale !== 'fr') {
                 return false;
             }
 

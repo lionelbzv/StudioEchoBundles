@@ -1,40 +1,39 @@
-StudioEchoBundles
+# StudioEchoBundles
 =================
 Ensemble de bundles SF2
 
-
-Lib
+## Lib
 =================
 Classe statique possédant des méthodes utiles.
 TODO à ne plus utiliser
 
-
-StudioEchoMediaBundle
+## StudioEchoMediaBundle
 =================
 Gestion de galeries d'images et de documents.
 
+### upd to i18n
+cf. StudioEchoMediaBundle/Resources/config/sql-i18n_migration_update.sql
 
-StudioEchoGmapsBundle
+## StudioEchoGmapsBundle
 =================
 Gestion du positionnement d'un point sur une carte gmaps
 
-
-StudioEchoIvoryLuceneIndexationBundle
+## StudioEchoIvoryLuceneIndexationBundle
 =================
 Gestion de l'indexation pour une recherche ZendLucene
 
 
-StudioEchoAgendaBundle
+## StudioEchoAgendaBundle
 =================
 Gestion d'un agenda
 
 
-StudioEchoPaypalBundle
+## StudioEchoPaypalBundle
 =================
 Gestion du paiement via API Paypal
 
 
-StudioEchoSipsAtosBundle
+## StudioEchoSipsAtosBundle
 =================
 Gestion du paiement via API Atos
 

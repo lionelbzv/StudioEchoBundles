@@ -1,11 +1,11 @@
 media_homepage:
     pattern:  /
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:index, culture: 'fr_FR' }
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:index, culture: 'fr' }
 
 # Upload / Display routes
 media_display_zone:
     pattern:  /display/{mediaObjectId}/key/{mediaParameterConfigKey}/{culture}
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:displayZone, culture: 'fr_FR' }
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:displayZone, culture: 'fr' }
 
 # JSON routes
 media_upload_file:
@@ -20,12 +20,12 @@ media_delete_file:
 
 media_online_file:
     pattern: /online-file/{mediaFileId}//{culture}/online.{_format}
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:online, _format: json, culture: 'fr_FR' }
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:online, _format: json, culture: 'fr' }
     requirements: { _format: (xml|json), _method: GET }
 
 media_edit_file:
     pattern: /edit-file/{mediaFileId}/{culture}/edit.{_format}
-    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:edit, _format: json, culture: 'fr_FR' }
+    defaults: { _controller: StudioEchoMediaBundle:UploadMedia:edit, _format: json, culture: 'fr' }
     requirements: { _format: (xml|json), _method: POST }
 
 media_sort:

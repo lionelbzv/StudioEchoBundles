@@ -81,7 +81,7 @@ class SeMediaFileTableMap extends TableMap
   'i18n_columns' => 'title, description, copyright, online',
   'i18n_pk_name' => NULL,
   'locale_column' => 'locale',
-  'default_locale' => 'fr_FR',
+  'default_locale' => 'fr',
   'locale_alias' => '',
 ),
             'timestampable' =>  array (

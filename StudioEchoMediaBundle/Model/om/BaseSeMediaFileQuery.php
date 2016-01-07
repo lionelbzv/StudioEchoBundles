@@ -879,7 +879,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *
      * @return    SeMediaFileQuery The current query, for fluid interface
      */
-    public function joinI18n($locale = 'fr_FR', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinI18n($locale = 'fr', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $relationName = $relationAlias ? $relationAlias : 'SeMediaFileI18n';
 
@@ -897,7 +897,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *
      * @return    SeMediaFileQuery The current query, for fluid interface
      */
-    public function joinWithI18n($locale = 'fr_FR', $joinType = Criteria::LEFT_JOIN)
+    public function joinWithI18n($locale = 'fr', $joinType = Criteria::LEFT_JOIN)
     {
         $this
             ->joinI18n($locale, null, $joinType)
@@ -918,7 +918,7 @@ abstract class BaseSeMediaFileQuery extends ModelCriteria
      *
      * @return    SeMediaFileI18nQuery A secondary query class using the current class as primary query
      */
-    public function useI18nQuery($locale = 'fr_FR', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useI18nQuery($locale = 'fr', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinI18n($locale, $relationAlias, $joinType)
