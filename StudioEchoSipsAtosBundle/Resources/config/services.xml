@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="sips_atos.manager_class">StudioEchoBundles\StudioEchoSipsAtosBundle\Lib\SipsAtosManager</parameter>
-        <parameter key="sips_atos.order_query_class">MellisNaturallis\Model\OrderQuery</parameter>
+        <parameter key="sips_atos.order_query_class">SlaviaVintage\Model\OrderQuery</parameter>
     </parameters>
 
     <services>

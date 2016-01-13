@@ -7,14 +7,15 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 /**
  * Description of PaypalManager
- * 
+ *
  * docs paypal:
  * https://www.x.com/developers/paypal/documentation-tools/paypal-payments-standard/integration-guide/cart_upload
  * https://www.x.com/developers/paypal/documentation-tools/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables#id08A6HH0D0TA
- * 
+ *
  * @author Studio Echo / Lionel Bouzonville w./ help from https://github.com/orderly/symfony2-paypal-ipn
  */
-class PaypalManager {
+class PaypalManager
+{
     // container & propel query instance & monolog service
     private $serviceContainer;
     private $orderQuery;
@@ -52,7 +53,7 @@ class PaypalManager {
      * @param OrderQuery $orderQuery
      * @param LoggerInterface $logger
      */
-    function __construct(DependencyInjection\ContainerInterface $container, \StudioEcho\StudioEchoPaypalBundle\Lib\OrderQueryInterface $orderQuery, LoggerInterface $logger = null)
+    public function __construct(DependencyInjection\ContainerInterface $container, OrderQueryInterface $orderQuery, LoggerInterface $logger = null)
     {
         $this->serviceContainer =& $container;
         $this->orderQuery = $orderQuery;
@@ -75,16 +76,17 @@ class PaypalManager {
         $this->cbt = $studio_echo_paypal['cbt'];
         $this->cancelReturn = $studio_echo_paypal['cancel_return'];
         $this->charset = $studio_echo_paypal['charset'];
-   }
+    }
 
     /**
      * Construit le form d'appel paypal.
-     * 
+     *
      * @param $orderId      Identifiant de la commande
-     * 
+     *
      * @return string       Formulaire / Code généré
      */
-    public function computePaypalRequest($orderId) {
+    public function computePaypalRequest($orderId)
+    {
         if (null !== $this->logger) {
             $this->logger->debug('*** computePaypalRequest');
         }
@@ -156,7 +158,7 @@ class PaypalManager {
     
     /**
      * Validate the IPN received signal
-     * 
+     *
      * @return bool
      */
     public function validateIPN()
@@ -254,17 +256,17 @@ class PaypalManager {
     
     /**
      * Sending post data to PayPal IPN service
-     * 
+     *
      * @param string $url
      * @param array $postData
-     * 
+     *
      * @return string
      */
     private function postData($url, $postData)
     {
         // Put the postData into a string
         $postString = '';
-        foreach ($postData as $field=>$value) {
+        foreach ($postData as $field => $value) {
             $postString .= $field . '=' . urlencode(stripslashes($value)) . '&'; // Trailing & at end of post string is forgivable
         }
 
@@ -309,7 +311,7 @@ class PaypalManager {
     /**
      * Get orderStatus
      *
-     * @return string 
+     * @return string
      */
     public function getOrderStatus()
     {
@@ -319,7 +321,7 @@ class PaypalManager {
     /**
      * Get orderStatus
      *
-     * @return string 
+     * @return string
      */
     public function getOrderId()
     {
@@ -327,9 +329,10 @@ class PaypalManager {
     }
     
     /**
-     * 
+     *
      */
-    public function updatePaymentOrderStatus() {
+    public function updatePaymentOrderStatus()
+    {
         $orderId = $this->ipnData['invoice'];
         if ($this->orderStatus == self::PAID) {
             $this->orderQuery->pp_updateOrderStatusAfterPaymentAccepted($orderId);
@@ -338,5 +341,4 @@ class PaypalManager {
             $this->orderQuery->pp_updateOrderStatusAfterPaymentRejected($orderId);
         }
     }
-    
 }
