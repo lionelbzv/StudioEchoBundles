@@ -7,11 +7,15 @@ class SeiliExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'highlight' => new \Twig_Filter_Method($this, 'highlightFilter'),
+            new \Twig_SimpleFilter(
+                'highlight',
+                array($this, 'highlight'),
+                array('is_safe' => array('html'))
+            ),
         );
     }
 
-    public function highlightFilter($input, $queryStr, $bgcolor = '#FFFF00')
+    public function highlight($input, $queryStr, $bgcolor = '#FFFF00')
     {
         $output = $input;
 
@@ -34,5 +38,4 @@ class SeiliExtension extends \Twig_Extension
     {
         return preg_replace("/($needle)/i", sprintf('<span style="background-color: %s">$1</span>', $bgcolor), $haystack);
     }
-
 }
