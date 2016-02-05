@@ -1,7 +1,7 @@
 {% set mediaConfig = app.session.get('studio_echo_media_bundle/' ~ mediaParameterConfigKey) %}
-<div id="media-loading-box" class="alert alert-info"></div>
-<div id="media-success-box" class="alert alert-success"></div>
-<div id="media-error-box" class="alert alert-danger"></div>
+<div id="media-loading-box" class="media-alert alert-info"></div>
+<div id="media-success-box" class="media-alert alert-success"></div>
+<div id="media-error-box" class="media-alert alert-danger"></div>
 <ul id="medialist">
   {% for mediaFile in mediaFiles %}
     <li id="{{ mediaFile.id }}">
@@ -62,7 +62,7 @@
 <script>
       $(document).ready(function () {
         // Hide info / success / error boxes
-        $(".alert").hide();
+        $(".media-alert").hide();
 
         // Hide edit blocks
         $("[category='displayzone_{{ mediaConfig.category_id }}'] .fileblock-edit").hide();
