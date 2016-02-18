@@ -69,13 +69,11 @@ class GmapsWidgetExtension extends \Twig_Extension
         $apiInit = $config['api_init'];
         $this->logger->info('$apiInit = '.print_r($apiInit, true));
 
-        $sensor = $apiInit['sensor']?'true':'false';
         $apiKey = $apiInit['api_key'];
         $region = $apiInit['region'];
         $version = $apiInit['version'];
 
         return $this->templating->render('StudioEchoGmapsBundle:Form:init.js.twig', array(
-                    'sensor' => $sensor,
                     'apiKey' => $apiKey,
                     'region' => $region,
                     'version' => $version
@@ -118,5 +116,4 @@ class GmapsWidgetExtension extends \Twig_Extension
                     'mapTypeId' => $mapTypeId
                     ));
     }
-
 }
