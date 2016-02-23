@@ -1,5 +1,5 @@
 {% set mediaConfig = app.session.get('studio_echo_media_bundle/' ~ mediaParameterConfigKey) %}
-<div id="mediabundle" class="mediabundle-container">
+<div id="mediabundle" class="row mediabundle-container">
     <div id="displayzone" category="displayzone_{{ mediaConfig.category_id }}" class="col-md-8">
         {{ render(controller('StudioEchoMediaBundle:UploadMedia:displayZone', { 'mediaObjectId': currentMediaObjectId, 'culture': culture, 'mediaParameterConfigKey': mediaParameterConfigKey })) }}
     </div>
