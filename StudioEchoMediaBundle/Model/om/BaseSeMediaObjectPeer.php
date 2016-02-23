@@ -9,6 +9,9 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use Glorpen\Propel\PropelBundle\Dispatcher\EventDispatcherProxy;
+use Glorpen\Propel\PropelBundle\Events\DetectOMClassEvent;
+use Glorpen\Propel\PropelBundle\Events\PeerEvent;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObject;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeMediaObjectPeer;
 use StudioEchoBundles\StudioEchoMediaBundle\Model\SeObjectHasFilePeer;
@@ -471,7 +474,7 @@ abstract class BaseSeMediaObjectPeer
             // $obj->hydrate($row, $startcol, true); // rehydrate
             $col = $startcol + SeMediaObjectPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = SeMediaObjectPeer::OM_CLASS;
+            $cls = SeMediaObjectPeer::getOMClass($row, $startcol);
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
             SeMediaObjectPeer::addInstanceToPool($obj, $key);
@@ -511,6 +514,13 @@ abstract class BaseSeMediaObjectPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
+
+        $event = new DetectOMClassEvent(SeMediaObjectPeer::OM_CLASS, $row, $colnum);
+        EventDispatcherProxy::trigger('om.detect', $event);
+        if($event->isDetected()){
+            return $event->getDetectedClass();
+        }
+
         return SeMediaObjectPeer::OM_CLASS;
     }
 
@@ -783,3 +793,4 @@ abstract class BaseSeMediaObjectPeer
 //
 BaseSeMediaObjectPeer::buildTableMap();
 
+EventDispatcherProxy::trigger(array('construct','peer.construct'), new PeerEvent('StudioEchoBundles\StudioEchoMediaBundle\Model\om\BaseSeMediaObjectPeer'));
