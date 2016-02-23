@@ -58,8 +58,9 @@ class GmapsWidgetExtension extends \Twig_Extension
 
     /**
      *
+     * @param string $mode admin | front
      */
-    public function renderGmapsInit()
+    public function renderGmapsInit($mode = 'admin')
     {
         $this->logger->info('*** renderGmapsInit');
 
@@ -74,10 +75,11 @@ class GmapsWidgetExtension extends \Twig_Extension
         $version = $apiInit['version'];
 
         return $this->templating->render('StudioEchoGmapsBundle:Form:init.js.twig', array(
-                    'apiKey' => $apiKey,
-                    'region' => $region,
-                    'version' => $version
-                    ));
+            'apiKey' => $apiKey,
+            'region' => $region,
+            'version' => $version,
+            'mode' => $mode
+        ));
     }
 
     /**
