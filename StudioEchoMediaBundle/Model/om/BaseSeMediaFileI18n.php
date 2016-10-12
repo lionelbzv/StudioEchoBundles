@@ -378,6 +378,8 @@ abstract class BaseSeMediaFileI18n extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+            // event behavior
+            EventDispatcherProxy::trigger(array('model.hydrate.post'), new ModelEvent($this));
 
             return $startcol + 6; // 6 = SeMediaFileI18nPeer::NUM_HYDRATE_COLUMNS.
 

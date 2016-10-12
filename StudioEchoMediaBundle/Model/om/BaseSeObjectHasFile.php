@@ -401,6 +401,8 @@ abstract class BaseSeObjectHasFile extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+            // event behavior
+            EventDispatcherProxy::trigger(array('model.hydrate.post'), new ModelEvent($this));
 
             return $startcol + 5; // 5 = SeObjectHasFilePeer::NUM_HYDRATE_COLUMNS.
 
