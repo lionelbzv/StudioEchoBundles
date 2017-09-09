@@ -14,17 +14,29 @@ class MediaExtension extends \Twig_Extension
     }
 
     /**
-     * {@inheritdoc}
+     *  Renvoie la liste des fonctions
      */
     public function getFunctions()
     {
         return array(
-            'seMediaGetName' => new \Twig_Function_Method($this, 'seMediaGetName'),
-            'seMediaGetList' => new \Twig_Function_Method($this, 'seMediaGetList'),
-            'seMediaGetFileNames' => new \Twig_Function_Method($this, 'seMediaGetFileNames')
+            'seMediaGetName'  => new \Twig_SimpleFunction(
+                'seMediaGetName',
+                array($this, 'seMediaGetName'),
+                array('is_safe' => array('html'), 'needs_environment' => true)
+            ),
+            'seMediaGetList'  => new \Twig_SimpleFunction(
+                'seMediaGetList',
+                array($this, 'seMediaGetList'),
+                array('is_safe' => array('html'), 'needs_environment' => true)
+            ),
+            'seMediaGetFileNames'  => new \Twig_SimpleFunction(
+                'seMediaGetFileNames',
+                array($this, 'seMediaGetFileNames'),
+                array('is_safe' => array('html'), 'needs_environment' => true)
+            ),
         );
     }
-    
+
     /**
      *
      */
