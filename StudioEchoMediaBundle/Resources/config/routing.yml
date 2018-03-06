@@ -1,34 +1,34 @@
 media_homepage:
-    pattern:  /
+    path:  /
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:index, culture: 'fr' }
 
 # Upload / Display routes
 media_display_zone:
-    pattern:  /display/{mediaObjectId}/key/{mediaParameterConfigKey}/{culture}
+    path:  /display/{mediaObjectId}/key/{mediaParameterConfigKey}/{culture}
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:displayZone, culture: 'fr' }
 
 # JSON routes
 media_upload_file:
-    pattern:  /upload-file/upload.{_format}
+    path:  /upload-file/upload.{_format}
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:upload, _format: json }
     requirements: { _format: (xml|json) }
 
 media_delete_file:
-    pattern: /delete-file/{mediaFileId}/{mediaParameterConfigKey}/delete.{_format}
+    path: /delete-file/{mediaFileId}/{mediaParameterConfigKey}/delete.{_format}
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:delete, _format: json }
     requirements: { _format: (xml|json), _method: GET }
 
 media_online_file:
-    pattern: /online-file/{mediaFileId}//{culture}/online.{_format}
+    path: /online-file/{mediaFileId}//{culture}/online.{_format}
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:online, _format: json, culture: 'fr' }
     requirements: { _format: (xml|json), _method: GET }
 
 media_edit_file:
-    pattern: /edit-file/{mediaFileId}/{culture}/edit.{_format}
+    path: /edit-file/{mediaFileId}/{culture}/edit.{_format}
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:edit, _format: json, culture: 'fr' }
     requirements: { _format: (xml|json), _method: POST }
 
 media_sort:
-    pattern: /sort-files/sort.{_format}
+    path: /sort-files/sort.{_format}
     defaults: { _controller: StudioEchoMediaBundle:UploadMedia:sort, _format: json }
     requirements: { _format: (xml|json), _method: POST }

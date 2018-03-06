@@ -57,6 +57,7 @@ class UploadMediaController extends Controller {
      * @return type
      */
     public function indexAction(
+            Request $request,
             $objectName, 
             $objectId, 
             $mediaParameterConfigKey,
@@ -77,7 +78,7 @@ class UploadMediaController extends Controller {
         }
 
         // Load config from session or from config if not found
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         $mediaConfig = $session->get('studio_echo_media_bundle/'.$mediaParameterConfigKey);
         if ($mediaConfig == null) {
             // Get the parameters
@@ -110,6 +111,7 @@ class UploadMediaController extends Controller {
      * @return type
      */
     public function displayZoneAction(
+            Request $request,
             $mediaObjectId,
             $culture,
             $mediaParameterConfigKey
@@ -125,7 +127,7 @@ class UploadMediaController extends Controller {
         $seMediaObject = SeMediaObjectQuery::create()->findPk($mediaObjectId);
 
         // Check config variable in session
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         $mediaConfig = $session->get('studio_echo_media_bundle/'.$mediaParameterConfigKey);
         if ($mediaConfig == null) {
             throw $this->createNotFoundException('MediaConfig not found in session or session has been lost.');
@@ -169,7 +171,7 @@ class UploadMediaController extends Controller {
         $mediaParameterConfigKey = $request->get('mediaParameterConfigKey');
         $logger->info('mediaParameterConfigKey = ' . $mediaParameterConfigKey);
 
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         $mediaConfig = $session->get('studio_echo_media_bundle/'.$mediaParameterConfigKey);
         $logger->info('$mediaConfig = '.print_r($mediaConfig, true));
         
@@ -246,6 +248,7 @@ class UploadMediaController extends Controller {
      * @param type $mediaFileId
      */
     public function deleteAction(
+        Request $request,
         $mediaFileId
     ) {
         $logger = $this->get('logger');
@@ -253,8 +256,8 @@ class UploadMediaController extends Controller {
         $logger->info('deleteAction');
         $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
 
-        $session = $this->getRequest()->getSession();
-        $mediaConfig = $session->get('studio_echo_media_bundle/'.$this->getRequest()->get('mediaParameterConfigKey'));
+        $session = $request->getSession();
+        $mediaConfig = $session->get('studio_echo_media_bundle/'.$request->get('mediaParameterConfigKey'));
         
         try {
             // Get the current edit object
@@ -286,6 +289,7 @@ class UploadMediaController extends Controller {
      * @param type $mediaFileId
      */
     public function onlineAction(
+        Request $request,
     	$mediaFileId,
         $culture
     ) {
@@ -320,6 +324,7 @@ class UploadMediaController extends Controller {
      * @param type $mediaFileId
      */
     public function editAction(
+        Request $request,
         $mediaFileId,
         $culture
     ) {
@@ -329,8 +334,6 @@ class UploadMediaController extends Controller {
         $logger->info('$mediaFileId = '.print_r($mediaFileId, true));
         $logger->info('$culture = '.print_r($culture, true));
 
-        $request = $this->getRequest();
-        
         try {
             // Get the current edit object
             $seMediaFile = SeMediaFileQuery::create()->findPk($mediaFileId);
@@ -366,9 +369,8 @@ class UploadMediaController extends Controller {
      * 
      */
     public function sortAction(
+        Request $request
     ) {
-        $request = $this->getRequest();
-
         $logger = $this->get('logger');
         $logger->info('UploadMediaController');
         $logger->info('sortAction');
